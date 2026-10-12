@@ -6,6 +6,7 @@ import { logger } from '@esync/utils';
 import { Settings } from '@gi-types/gio2';
 import { EventEmitter } from 'events';
 import { Local } from '@esync/api/providers/local';
+import { HttpTransportPort } from '@esync/core/ports';
 import { SyncProvider, SyncEvent, SyncOperationStatus, SyncProviderType } from '@esync/api/types';
 
 const debug = logger('api');
@@ -15,15 +16,25 @@ export class Api {
   private eventEmitter: EventEmitter;
   private settings: Settings;
   private data: Data;
+  private httpTransport?: HttpTransportPort;
+  private settingsChangedId?: number;
 
-  constructor(eventEmitter: EventEmitter, data: Data) {
+  constructor(eventEmitter: EventEmitter, data: Data, httpTransport?: HttpTransportPort) {
     this.data = data;
+    this.httpTransport = httpTransport;
     this.settings = getCurrentExtensionSettings();
     this.provider = this.createProvider();
     this.eventEmitter = eventEmitter;
     this.eventEmitter.on(SyncEvent.SAVE, this.save.bind(this));
     this.eventEmitter.on(SyncEvent.READ, this.read.bind(this));
-    this.settings.connect('changed', this.updateProvider.bind(this));
+    this.settingsChangedId = this.settings.connect('changed', this.updateProvider.bind(this));
+  }
+
+  destroy(): void {
+    if (this.settings && this.settingsChangedId !== undefined) {
+      this.settings.disconnect(this.settingsChangedId);
+      this.settingsChangedId = undefined;
+    }
   }
 
   async save(): Promise<void> {
@@ -82,14 +93,14 @@ export class Api {
     const gistId = this.settings.get_string('github-gist-id');
     const userToken = this.settings.get_string('github-user-token');
 
-    return new Github(gistId, userToken);
+    return new Github(gistId, userToken, this.httpTransport);
   }
 
   private createGitlabProvider(): SyncProvider {
     const snippetId = this.settings.get_string('gitlab-snippet-id');
     const userToken = this.settings.get_string('gitlab-user-token');
 
-    return new Gitlab(snippetId, userToken);
+    return new Gitlab(snippetId, userToken, this.httpTransport);
   }
 
   private createLocalProvider(): SyncProvider {

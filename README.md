@@ -2,32 +2,31 @@
 
 [![ts](https://badgen.net/badge/icon/typescript?icon=typescript&label)](#)
 [![opensource](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](#)
-[![licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://github.com/oae/gnome-shell-extensions-sync/blob/master/LICENSE)
-[![latest](https://img.shields.io/github/v/release/oae/gnome-shell-extensions-sync)](https://github.com/oae/gnome-shell-extensions-sync/releases/latest)
-[![compare](https://img.shields.io/github/commits-since/oae/gnome-shell-extensions-sync/latest/master)](https://github.com/oae/gnome-shell-extensions-sync/compare)
+[![licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://github.com/richardnpaul/gnome-shell-extensions-sync/blob/master/LICENSE)
+[![latest](https://img.shields.io/github/v/release/richardnpaul/gnome-shell-extensions-sync)](https://github.com/richardnpaul/gnome-shell-extensions-sync/releases/latest)
+[![compare](https://img.shields.io/github/commits-since/richardnpaul/gnome-shell-extensions-sync/latest/master)](https://github.com/richardnpaul/gnome-shell-extensions-sync/compare)
 
 Syncs gnome shell keybindings, tweaks settings and extensions with their configuration across all gnome installations
 
-|               Provider               |              Synced Data             |            Other Settings            |
-|:------------------------------------:|:------------------------------------:|:------------------------------------:|
+|               Provider               |             Synced Data              |            Other Settings            |
+| :----------------------------------: | :----------------------------------: | :----------------------------------: |
 | ![](https://i.imgur.com/4Sv3Jus.png) | ![](https://i.imgur.com/Ii6Q8w3.png) | ![](https://i.imgur.com/OvDy80f.png) |
 
 ## Installation
 
-### From [Git](https://github.com/oae/gnome-shell-extensions-sync)
+### From [Git](https://github.com/richardnpaul/gnome-shell-extensions-sync)
 
 ```bash
-git clone https://github.com/oae/gnome-shell-extensions-sync.git
+git clone https://github.com/richardnpaul/gnome-shell-extensions-sync.git
 cd ./gnome-shell-extensions-sync
-yarn install
-yarn build
-ln -s "$PWD/dist" "$HOME/.local/share/gnome-shell/extensions/extensions-sync@elhan.io"
+npm install
+npm run build
+ln -s "$PWD/dist" "$HOME/.local/share/gnome-shell/extensions/extensions-sync@richardnpaul.github.com"
 ```
 
 ### From [Ego](https://extensions.gnome.org)
 
-You can install it from [**here**](https://extensions.gnome.org/extension/1486/extensions-sync/)
-  
+You can install it from [**here**](https://extensions.gnome.org/extension/**/extensions-sync/)
 
 ## Usage
 
@@ -36,7 +35,7 @@ You can install it from [**here**](https://extensions.gnome.org/extension/1486/e
 ## For Github
 
 1. Create a new gist from [here](https://gist.github.com/) I suggest you make it secret. You will need the gist id for this. You can find it in the url after username. For example on gist url `https://gist.github.com/username/f545156c0083f7eaefa44ab69df4ec37`, gist id will be `f545156c0083f7eaefa44ab69df4ec37`. [Guide](https://docs.github.com/en/get-started/writing-on-github/editing-and-sharing-content-with-gists/creating-gists)
-2. Create a new token from [here](https://github.com/settings/tokens/new). Only **gist permission** is needed since we edit the gists. [Guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+2. Create a new token from [here](https://github.com/settings/personal-access-tokens). Only **gist permission** is needed since we edit the gists. [Guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 3. Open extension settings, select the `Github` provider and fill gist id from first step and user token from second step.
 
 ## For Gitlab
@@ -66,16 +65,16 @@ busctl --user call org.gnome.Shell /io/elhan/ExtensionsSync io.elhan.ExtensionsS
   - Clone the project
 
     ```sh
-    git clone https://github.com/oae/gnome-shell-extensions-sync.git
+    git clone https://github.com/richardnpaul/gnome-shell-extensions-sync.git
     cd ./gnome-shell-extensions-sync
     ```
 
   - Install dependencies and build it
 
     ```sh
-    yarn install
-    yarn build
-    ln -s "$PWD/dist" "$HOME/.local/share/gnome-shell/extensions/extensions-sync@elhan.io"
+    npm install
+    npm run build
+    ln -s "$PWD/dist" "$HOME/.local/share/gnome-shell/extensions/extensions-sync@richardnpaul.github.com"
     ```
 
-  - During development you can use `yarn watch` command to keep generated code up-to-date.
+  - During development you can use `npm run watch` command to keep generated code up-to-date.

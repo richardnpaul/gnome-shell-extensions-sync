@@ -1,5 +1,5 @@
-import { AsyncResult, Subprocess, SubprocessFlags } from '@gi-types/gio2';
-import { PRIORITY_DEFAULT, Source, timeout_add } from '@gi-types/glib2';
+import { AsyncResult, File, FileCreateFlags, Subprocess, SubprocessFlags } from '@gi-types/gio2';
+import { Bytes, PRIORITY_DEFAULT, Source, timeout_add } from '@gi-types/glib2';
 
 export const logger =
   (prefix: string) =>
@@ -55,3 +55,38 @@ export const enumListToSettingsFlags = (enumList: Array<any>): number =>
   enumList.reduce((acc, enumValue) => {
     return acc + Math.pow(2, enumValue);
   }, 0);
+
+export const readFileContentsAsync = (file: File): Promise<Uint8Array> => {
+  return new Promise((resolve, reject) => {
+    file.load_contents_async(null, (_: any, res: AsyncResult) => {
+      try {
+        const [, contents] = file.load_contents_finish(res);
+        resolve(contents);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  });
+};
+
+export const replaceFileContentsAsync = (file: File, contents: Uint8Array): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    file.replace_contents_bytes_async(
+      new Bytes(contents),
+      null,
+      false,
+      FileCreateFlags.REPLACE_DESTINATION,
+      null,
+      (_: any, res: AsyncResult) => {
+        try {
+          file.replace_contents_finish(res);
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      },
+    );
+  });
+};
+
+export * from './disposables';

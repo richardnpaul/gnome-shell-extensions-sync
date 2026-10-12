@@ -1,0 +1,52 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-xml
+      - id: check-toml
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-symlinks
+      - id: destroyed-symlinks
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: detect-private-key
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+      - id: check-vcs-permalinks
+      - id: check-illegal-windows-names
+
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        entry: npx eslint --ignore-path .eslintignore
+        language: system
+        types_or: [javascript, jsx, ts, tsx]
+        files: \.(ts|js|mjs)$
+
+      - id: typecheck
+        name: typecheck
+        entry: npx tsc --noEmit
+        language: system
+        files: \.ts$
+        pass_filenames: false
+
+      - id: prettier
+        name: prettier
+        entry: npx prettier --check
+        language: system
+        types_or: [json, yaml, markdown, css]
+
+      - id: commitlint
+        name: commitlint
+        entry: npx commitlint --edit
+        language: system
+        stages: [commit-msg]

@@ -183,7 +183,7 @@ tags
 
 # End of https://www.gitignore.io/api/vim,linux,sublimetext,visualstudiocode
 gschemas.compiled
-extensions-sync@elhan.io*.zip
+extensions-sync*.zip
 _build
 node_modules
 @types
@@ -290,8 +290,11 @@ fabric.properties
 ### Vagrant Patch ###
 *.box
 
-# End of https://www.gitignore.io/api/node,linux,webstorm,sublimetext,visualstudiocode
-
 # ts-for-gjs output
 
 docs-lock.json
+
+# Test and mutation reports
+reports/
+.stryker-tmp/
+stryker-setup-*.js

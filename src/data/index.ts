@@ -33,11 +33,19 @@ export interface DataProvider {
 export class Data {
   private settings: Settings;
   private providers: Array<DataProvider>;
+  private settingsChangedId?: number;
 
   constructor() {
     this.settings = getCurrentExtensionSettings();
     this.providers = this.createProviders();
-    this.settings.connect('changed', this.updateProviders.bind(this));
+    this.settingsChangedId = this.settings.connect('changed', this.updateProviders.bind(this));
+  }
+
+  destroy(): void {
+    if (this.settings && this.settingsChangedId !== undefined) {
+      this.settings.disconnect(this.settingsChangedId);
+      this.settingsChangedId = undefined;
+    }
   }
 
   async getSyncData(): Promise<SyncData> {

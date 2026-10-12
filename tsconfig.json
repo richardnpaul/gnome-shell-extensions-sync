@@ -10,9 +10,12 @@
     "allowJs": true,
     "strictPropertyInitialization": false,
     "baseUrl": "./src/",
+    "outDir": "./dist",
     "moduleResolution": "Node",
     "paths": {
       "@esync/*": ["./*"]
-    }
-  }
+    },
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
 }

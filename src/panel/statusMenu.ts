@@ -4,10 +4,10 @@ import { execute, logger } from '@esync/utils';
 import { icon_new_for_string, Settings } from '@gi-types/gio2';
 import { Icon } from '@gi-types/st1';
 import { EventEmitter } from 'events';
-
-const { Button } = imports.ui.panelMenu;
-const { PopupImageMenuItem, PopupSeparatorMenuItem } = imports.ui.popupMenu;
-const { panel } = imports.ui.main;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+const _ = (str: string): string => str;
 
 const debug = logger('statusMenu');
 
@@ -16,16 +16,34 @@ export class StatusMenu {
   private button: any;
   private extension: ShellExtension;
   private settings: Settings;
+  private traySignalId?: number;
+  private onSave = this.disableButton.bind(this);
+  private onRead = this.disableButton.bind(this);
+  private onSaveFinished = this.enableButton.bind(this);
+  private onReadFinished = this.enableButton.bind(this);
 
   constructor(eventEmitter: EventEmitter) {
     this.eventEmitter = eventEmitter;
     this.extension = getCurrentExtension();
     this.settings = getCurrentExtensionSettings();
-    this.settings.connect('changed::show-tray-icon', this.toggleStatusMenu.bind(this));
+    if (this.settings) {
+      this.traySignalId = this.settings.connect('changed::show-tray-icon', this.toggleStatusMenu.bind(this));
+    }
+  }
+
+  destroy(): void {
+    this.hide();
+    if (this.settings && this.traySignalId !== undefined) {
+      this.settings.disconnect(this.traySignalId);
+      this.traySignalId = undefined;
+    }
   }
 
   show(): void {
-    const showTrayIcon = this.settings.get_boolean('show-tray-icon');
+    if (!this.settings) {
+      this.settings = getCurrentExtensionSettings();
+    }
+    const showTrayIcon = this.settings ? this.settings.get_boolean('show-tray-icon') : true;
     if (!showTrayIcon) {
       return;
     }
@@ -33,13 +51,13 @@ export class StatusMenu {
       this.button = this.createButton();
     }
 
-    this.eventEmitter.on(SyncEvent.SAVE, this.disableButton.bind(this));
-    this.eventEmitter.on(SyncEvent.READ, this.disableButton.bind(this));
+    this.eventEmitter.on(SyncEvent.SAVE, this.onSave);
+    this.eventEmitter.on(SyncEvent.READ, this.onRead);
 
-    this.eventEmitter.on(SyncEvent.SAVE_FINISHED, this.enableButton.bind(this));
-    this.eventEmitter.on(SyncEvent.READ_FINISHED, this.enableButton.bind(this));
+    this.eventEmitter.on(SyncEvent.SAVE_FINISHED, this.onSaveFinished);
+    this.eventEmitter.on(SyncEvent.READ_FINISHED, this.onReadFinished);
 
-    panel.addToStatusArea('extensions-sync', this.button);
+    Main.panel.addToStatusArea('extensions-sync', this.button);
     debug('showing status menu in panel');
   }
 
@@ -48,19 +66,16 @@ export class StatusMenu {
       this.button.destroy();
       this.button = undefined;
     }
-    if (panel.statusArea['extensions-sync']) {
-      panel.statusArea['extensions-sync'].destroy();
-      this.eventEmitter.off(SyncEvent.SAVE, this.disableButton.bind(this));
-      this.eventEmitter.off(SyncEvent.READ, this.disableButton.bind(this));
+    this.eventEmitter.off(SyncEvent.SAVE, this.onSave);
+    this.eventEmitter.off(SyncEvent.READ, this.onRead);
 
-      this.eventEmitter.off(SyncEvent.SAVE_FINISHED, this.enableButton.bind(this));
-      this.eventEmitter.off(SyncEvent.READ_FINISHED, this.enableButton.bind(this));
-      debug('removing status menu from panel');
-    }
+    this.eventEmitter.off(SyncEvent.SAVE_FINISHED, this.onSaveFinished);
+    this.eventEmitter.off(SyncEvent.READ_FINISHED, this.onReadFinished);
+    debug('removing status menu from panel');
   }
 
   private toggleStatusMenu(): void {
-    const showTrayIcon = this.settings.get_boolean('show-tray-icon');
+    const showTrayIcon = this.settings ? this.settings.get_boolean('show-tray-icon') : true;
     if (showTrayIcon) {
       this.show();
     } else {
@@ -69,10 +84,10 @@ export class StatusMenu {
   }
 
   private createButton(): any {
-    const newButton = new Button(0, _('Sync Settings'));
+    const newButton = new PanelMenu.Button(0.0, _('Sync Settings'), false);
 
     newButton.icon = this.createIcon('synced');
-    newButton.add_actor(newButton.icon);
+    newButton.add_child(newButton.icon);
 
     newButton.menu.addMenuItem(
       this.createMenuItem(_('Upload'), 'upload', () => this.eventEmitter.emit(SyncEvent.SAVE)),
@@ -80,28 +95,35 @@ export class StatusMenu {
     newButton.menu.addMenuItem(
       this.createMenuItem(_('Download'), 'download', () => this.eventEmitter.emit(SyncEvent.READ)),
     );
-    newButton.menu.addMenuItem(new PopupSeparatorMenuItem());
+    newButton.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     newButton.menu.addMenuItem(
       this.createMenuItem(_('Preferences'), 'preferences', () => {
-        execute(`gnome-extensions prefs "${this.extension.metadata.uuid}"`);
+        const ext = getCurrentExtension();
+        if (ext && typeof ext.openPreferences === 'function') {
+          ext.openPreferences();
+        } else {
+          execute(
+            `gnome-extensions prefs "${this.extension?.metadata?.uuid || 'extensions-sync@richardnpaul.github.com'}"`,
+          );
+        }
       }),
     );
 
     return newButton;
   }
 
-  private createMenuItem(menuTitle: string, actionType: string, onClick?: () => void): any {
-    const menuItem = new PopupImageMenuItem(`${menuTitle}`, this.createIcon(`${actionType}`).gicon);
-    if (onClick) {
-      menuItem.connect('activate', () => onClick());
-    }
+  private createMenuItem(menuTitle: string, actionType: string, onClick: () => void): any {
+    const menuItem = new PopupMenu.PopupImageMenuItem(`${menuTitle}`, this.createIcon(`${actionType}`).gicon);
+    menuItem.connect('activate', () => onClick());
 
     return menuItem;
   }
 
   private createIcon(iconType: string): Icon {
+    const ext = getCurrentExtension() || this.extension;
+    const basePath = ext ? ext.path : '';
     return new Icon({
-      gicon: icon_new_for_string(`${this.extension.path}/icons/extensions-sync-${iconType}-symbolic.svg`),
+      gicon: icon_new_for_string(`${basePath}/icons/extensions-sync-${iconType}-symbolic.svg`),
       style_class: 'system-status-icon',
     });
   }

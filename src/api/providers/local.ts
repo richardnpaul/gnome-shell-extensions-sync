@@ -1,5 +1,6 @@
 import { SyncData } from '@esync/data';
-import { File, FileCreateFlags } from '@gi-types/gio2';
+import { File } from '@gi-types/gio2';
+import { readFileContentsAsync, replaceFileContentsAsync } from '@esync/utils';
 import { SyncOperationStatus, SyncProvider } from '../types';
 
 export class Local implements SyncProvider {
@@ -18,13 +19,7 @@ export class Local implements SyncProvider {
       throw new Error(`Failed to backup settings. ${this.backupFileLocation} does not exist`);
     }
 
-    backupFile.replace_contents(
-      imports.byteArray.fromString(JSON.stringify(syncData)),
-      null,
-      false,
-      FileCreateFlags.REPLACE_DESTINATION,
-      null,
-    );
+    await replaceFileContentsAsync(backupFile, new TextEncoder().encode(JSON.stringify(syncData)));
 
     return SyncOperationStatus.SUCCESS;
   }
@@ -35,15 +30,20 @@ export class Local implements SyncProvider {
       throw new Error(`Failed to read settings from backup. ${this.backupFileLocation} does not exist`);
     }
 
-    const [status, syncDataBytes] = backupFile.load_contents(null);
+    let syncDataBytes: Uint8Array;
+    try {
+      syncDataBytes = await readFileContentsAsync(backupFile);
+    } catch {
+      throw new Error(`Failed to read settings from backup. ${this.backupFileLocation} could not be read`);
+    }
 
-    if (!syncDataBytes.length || !status) {
+    if (!syncDataBytes || !syncDataBytes.length) {
       throw new Error(`Failed to read settings from backup. ${this.backupFileLocation} is corrupted`);
     }
 
     try {
-      return JSON.parse(imports.byteArray.toString(syncDataBytes));
-    } catch (err) {
+      return JSON.parse(new TextDecoder().decode(syncDataBytes));
+    } catch {
       throw new Error(`${this.backupFileLocation} is not a json file`);
     }
   }

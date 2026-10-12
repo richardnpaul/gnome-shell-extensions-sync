@@ -24,7 +24,7 @@ export class KeyBindingsDataProvider implements DataProvider {
           ...(await acc),
           [schema]: await readDconfData(schema),
         };
-      } catch (ex) {
+      } catch {
         debug(`cannot dump settings for ${schema}`);
       }
 

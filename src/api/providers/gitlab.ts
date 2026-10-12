@@ -1,6 +1,6 @@
+import { HttpTransportPort } from '@esync/core/ports';
 import { SyncData } from '@esync/data';
-import { Bytes, PRIORITY_DEFAULT } from '@gi-types/glib2';
-import { Message, Session, Status, status_get_phrase } from '@gi-types/soup3';
+import { Soup3Transport } from '@esync/platform/http/soup3Transport';
 import { SyncOperationStatus, SyncProvider } from '../types';
 
 export class Gitlab implements SyncProvider {
@@ -8,53 +8,56 @@ export class Gitlab implements SyncProvider {
 
   private snippetId: string;
   private userToken: string;
-  private session: Session;
+  private http: HttpTransportPort;
 
-  constructor(snippetId: string, userToken: string) {
+  constructor(snippetId: string, userToken: string, http?: HttpTransportPort) {
     this.snippetId = snippetId;
     this.userToken = userToken;
-    this.session = new Session();
+    this.http = http || new Soup3Transport();
   }
 
   async save(syncData: SyncData): Promise<SyncOperationStatus> {
-    const message = Message.new('PUT', `${Gitlab.SNIPPETS_API_URL}/${this.snippetId}`);
-    message.request_headers.append('User-Agent', 'Mozilla/5.0');
-    message.request_headers.append('PRIVATE-TOKEN', `${this.userToken}`);
     const requestBody = JSON.stringify({
       title: 'Extensions Sync',
       content: JSON.stringify(syncData),
     });
-    message.set_request_body_from_bytes('application/json', new Bytes(imports.byteArray.fromString(requestBody)));
-    await this.session.send_and_read_async(message, PRIORITY_DEFAULT, null);
 
-    const { statusCode } = message;
-    const phrase = status_get_phrase(statusCode);
-    if (statusCode !== Status.OK) {
-      throw new Error(`failed to save data to ${this.getName()}. Server status: ${phrase}`);
+    const response = await this.http.request({
+      method: 'PUT',
+      url: `${Gitlab.SNIPPETS_API_URL}/${this.snippetId}`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0',
+        'PRIVATE-TOKEN': `${this.userToken}`,
+      },
+      body: requestBody,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`failed to save data to ${this.getName()}. Server status: ${response.statusText}`);
     }
 
     return SyncOperationStatus.SUCCESS;
   }
 
   async read(): Promise<SyncData> {
-    const message = Message.new('GET', `${Gitlab.SNIPPETS_API_URL}/${this.snippetId}/raw`);
-    message.request_headers.append('User-Agent', 'Mozilla/5.0');
-    message.request_headers.append('PRIVATE-TOKEN', `${this.userToken}`);
+    const response = await this.http.request({
+      method: 'GET',
+      url: `${Gitlab.SNIPPETS_API_URL}/${this.snippetId}/raw`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0',
+        'PRIVATE-TOKEN': `${this.userToken}`,
+      },
+    });
 
-    const bytes = await this.session.send_and_read_async(message, PRIORITY_DEFAULT, null);
-    const { statusCode } = message;
-    const phrase = status_get_phrase(statusCode);
-    if (statusCode !== Status.OK) {
-      throw new Error(`failed to read data from ${this.getName()}. Server status: ${phrase}`);
+    if (response.status !== 200) {
+      throw new Error(`failed to read data from ${this.getName()}. Server status: ${response.statusText}`);
     }
 
-    const data = bytes.get_data();
-    if (data === null) {
+    if (!response.body) {
       throw new Error(`failed to read data from ${this.getName()}. Empty response`);
     }
 
-    const json = imports.byteArray.toString(data);
-    const syncData = JSON.parse(json);
+    const syncData = JSON.parse(response.body);
 
     return syncData;
   }
