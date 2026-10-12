@@ -23,6 +23,7 @@ Every submission **MUST** pass all of the following rules without exception. Vio
 
 - Every object, actor, or widget added to the Shell UI (`Main.panel`, `Main.uiGroup`, etc.) **MUST** be destroyed in `disable()`.
 - Example:
+
   ```javascript
   disable() {
     this._button?.destroy();
@@ -43,9 +44,9 @@ Every submission **MUST** pass all of the following rules without exception. Vio
 ### Rule 5: Zero Deprecated Modules
 
 - Extensions **MUST NOT** import deprecated legacy modules:
-  - ❌ `imports.byteArray` → Use standard web `TextEncoder` and `TextDecoder`.
-  - ❌ `imports.lang` → Use native ES6 classes and `Function.prototype.bind()`.
-  - ❌ `imports.mainloop` → Use `GLib.timeout_add()`, `GLib.idle_add()`, or standard timers.
+  - ❌ `imports.byteArray` - Use standard web `TextEncoder` and `TextDecoder`.
+  - ❌ `imports.lang` - Use native ES6 classes and `Function.prototype.bind()`.
+  - ❌ `imports.mainloop` - Use `GLib.timeout_add()`, `GLib.idle_add()`, or standard timers.
 
 ### Rule 6: Process Library Isolation
 

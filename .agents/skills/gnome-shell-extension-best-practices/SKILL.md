@@ -54,7 +54,7 @@ Extensions are loaded dynamically and may be enabled and disabled repeatedly dur
 
 ### Paired Setup and Teardown
 
-Every stateful action in `enable()` **must** have an explicit, matching teardown action in `disable()`:
+Every stateful action in `enable()` **MUST** have an explicit, matching teardown action in `disable()`:
 
 | Action in `enable()`              | Matching Action in `disable()` |
 | :-------------------------------- | :----------------------------- |
@@ -229,6 +229,7 @@ if (this.sourceId !== undefined) {
 
 - **Icons**: Use GNOME standard symbolic icon names from the system icon theme (`system-search-symbolic`, `preferences-system-symbolic`) rather than hardcoded emojis or raw raster images.
 - **Log Hygiene**: Avoid flooding the system journal (`journalctl /usr/bin/gnome-shell`). Use namespaced loggers:
+
   ```typescript
   const logDebug = (msg: string) => log(`[my-extension] ${msg}`);
   ```
