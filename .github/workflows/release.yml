@@ -2,20 +2,28 @@ name: Release & Publish
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+      - master
   workflow_dispatch:
     inputs:
+      force_release:
+        description: 'Force release even if tag already exists'
+        type: boolean
+        default: false
       submit_to_ego:
         description: 'Submit extension to extensions.gnome.org (EGO)'
         type: boolean
-        required: true
         default: true
 
 permissions:
   contents: write
   id-token: write
   attestations: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -24,6 +32,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN || secrets.PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -31,44 +42,90 @@ jobs:
           node-version: 22
           cache: 'npm'
 
+      - name: Check version and release status
+        id: version_check
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v${VERSION}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+          if git rev-parse "${TAG}" >/dev/null 2>&1; then
+            echo "Tag ${TAG} already exists in git history."
+            if [ "${{ github.event.inputs.force_release }}" = "true" ]; then
+              echo "force_release is true. Proceeding with release."
+              echo "should_release=true" >> $GITHUB_OUTPUT
+            else
+              echo "No new version detected in package.json (version ${VERSION} already tagged)."
+              echo "should_release=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "New version detected: ${VERSION} (Tag: ${TAG})"
+            echo "should_release=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and Push Git Tag
+        if: steps.version_check.outputs.should_release == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          TAG="${{ steps.version_check.outputs.tag }}"
+          if ! git rev-parse "${TAG}" >/dev/null 2>&1; then
+            echo "Creating annotated tag ${TAG}..."
+            git tag -a "${TAG}" -m "Release ${TAG}"
+            git push origin "${TAG}"
+            echo "Successfully pushed tag ${TAG}."
+          fi
+
       - name: Install system dependencies
+        if: steps.version_check.outputs.should_release == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y libglib2.0-bin zip gettext gnome-shell
 
       - name: Install Node dependencies
+        if: steps.version_check.outputs.should_release == 'true'
         run: npm ci
 
       - name: Run unit tests with coverage
+        if: steps.version_check.outputs.should_release == 'true'
         run: npm test
 
       - name: Build extension package
+        if: steps.version_check.outputs.should_release == 'true'
         run: npm run build:package
 
       - name: Generate CycloneDX SBOM
+        if: steps.version_check.outputs.should_release == 'true'
         run: npm run sbom
 
       - name: Generate SHA-256 Checksums
+        if: steps.version_check.outputs.should_release == 'true'
         run: npm run checksums
 
       - name: Setup Python
+        if: steps.version_check.outputs.should_release == 'true'
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
 
       - name: Install shexli
+        if: steps.version_check.outputs.should_release == 'true'
         run: pip install shexli
 
       - name: Run shexli static analysis
+        if: steps.version_check.outputs.should_release == 'true'
         run: shexli dist/extensions-sync@richardnpaul.github.com.zip
 
       - name: Attest Build Provenance
+        if: steps.version_check.outputs.should_release == 'true'
         id: attest_provenance
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: 'dist/extensions-sync@richardnpaul.github.com.zip'
 
       - name: Attest CycloneDX SBOM
+        if: steps.version_check.outputs.should_release == 'true'
         id: attest_sbom
         uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
         with:
@@ -76,10 +133,11 @@ jobs:
           sbom-path: 'dist/extensions-sync@richardnpaul.github.com.sbom.json'
 
       - name: Create GitHub Release
+        if: steps.version_check.outputs.should_release == 'true'
         id: create_release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ steps.version_check.outputs.tag }}
           files: |
             dist/extensions-sync@richardnpaul.github.com.zip
             dist/extensions-sync@richardnpaul.github.com.sbom.json
@@ -88,8 +146,22 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Check EGO credentials
+        if: steps.version_check.outputs.should_release == 'true'
+        id: ego_secrets_check
+        env:
+          EGO_USERNAME: ${{ secrets.EGO_USERNAME }}
+          EGO_PASSWORD: ${{ secrets.EGO_PASSWORD }}
+        run: |
+          if [ -z "$EGO_USERNAME" ] || [ -z "$EGO_PASSWORD" ]; then
+            echo "::notice title=EGO Submission Skipped::EGO_USERNAME or EGO_PASSWORD secret is not configured in repository settings. Automated upload to extensions.gnome.org was skipped."
+            echo "skip_ego=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip_ego=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Submit to extensions.gnome.org (EGO)
-        if: (github.event_name == 'push' || inputs.submit_to_ego == true) && env.EGO_USERNAME != '' && env.EGO_PASSWORD != ''
+        if: steps.version_check.outputs.should_release == 'true' && steps.ego_secrets_check.outputs.skip_ego != 'true' && (github.event_name == 'push' || inputs.submit_to_ego == true)
         env:
           EGO_USERNAME: ${{ secrets.EGO_USERNAME }}
           EGO_PASSWORD: ${{ secrets.EGO_PASSWORD }}
@@ -100,11 +172,3 @@ jobs:
             --password "$EGO_PASSWORD" \
             dist/extensions-sync@richardnpaul.github.com.zip
           echo "Successfully submitted to extensions.gnome.org!"
-
-      - name: Notice if EGO credentials are not configured
-        if: env.EGO_USERNAME == '' || env.EGO_PASSWORD == ''
-        env:
-          EGO_USERNAME: ${{ secrets.EGO_USERNAME }}
-          EGO_PASSWORD: ${{ secrets.EGO_PASSWORD }}
-        run: |
-          echo "::notice title=EGO Submission Skipped::EGO_USERNAME and/or EGO_PASSWORD secrets are not configured in repository settings. Automated upload to extensions.gnome.org was skipped."
