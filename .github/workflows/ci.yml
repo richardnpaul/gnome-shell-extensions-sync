@@ -115,7 +115,7 @@ jobs:
           python-version: '${{ env.python_version }}'
 
       - name: Install shexli
-        run: pip install shexli
+        run: pip install shexli tree-sitter==0.25.0
 
       - name: Run shexli static analysis
         run: shexli dist/extensions-sync@richardnpaul.github.com.zip
