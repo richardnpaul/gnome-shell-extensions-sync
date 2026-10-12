@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Swahili (sw)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Swahili Translators\n"
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Mipangilio ya Usawazishaji"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Pakia"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Pakua"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Mapendeleo"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Mtoa huduma"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Mtoa huduma wa Usawazishaji"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Chagua huduma ya wingu au ya ndani ili kusawazisha mipangilio yako."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Ndani"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "Mipangilio ya GitHub"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Unda Gist ya siri kwenye gist.github.com na uzalishe tokeni ya ufikiaji ya kibinafsi."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "Kitambulisho cha Gist"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "Tokeni ya GitHub"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "Mipangilio ya GitLab"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Unda kijisehemu cha faragha kwenye gitlab.com na uzalishe tokeni ya ufikiaji."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "Kitambulisho cha Kijisehemu"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "Tokeni ya GitLab"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Mipangilio ya Nakala rudufu ya Ndani"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Hifadhi na urejeshe usanidi wako kwenye/kutoka faili ya ndani ya JSON."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Mahali pa Faili ya Nakala rudufu"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Hakuna faili iliyochaguliwa"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Vinjari…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Chagua Mahali pa Faili ya Nakala rudufu"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Data Iliyosawazishwa"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Vipengele Vilivyosawazishwa"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Chagua vipengele vitakavyopakiwa na kupakuliwa."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Viendelezi"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Sawazisha viendelezi vyote vya mtumiaji na usanidi wao wa dconf"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Mikato ya Kibodi"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Sawazisha mikato yote ya GNOME Shell na GTK"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Marekebisho"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Sawazisha mandhari ya eneo-kazi la GNOME, fonti, kiolesura na marekebisho"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Jumla"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Tabia na Kiolesura"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Onyesha Ikoni ya Trei"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Onyesha ikoni ya hali ya usawazishaji kwenye paneli ya juu"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Onyesha Arifa"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Onyesha arifa za eneo-kazi kuhusu maendeleo na makosa"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Imeshindwa kutumia data ya usawazishaji kwenye mfumo wa sasa."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Viendelezi vimesasishwa. Inapakia upya GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Viendelezi vimesasishwa. Tafadhali pakia upya GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Mipangilio imehifadhiwa kwa ufanisi katika %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Hitilafu ilitokea wakati wa kuhifadhi mipangilio katika %s. Tafadhali kagua kumbukumbu."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Hitilafu ilitokea wakati wa kusoma mipangilio kutoka %s. Tafadhali kagua kumbukumbu."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

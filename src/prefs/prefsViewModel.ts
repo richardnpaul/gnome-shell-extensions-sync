@@ -2,12 +2,16 @@ import { SyncProviderType } from '@esync/api/types';
 import { DataProviderType } from '@esync/data';
 import { enumListToSettingsFlags, settingsFlagsToEnumList } from '@esync/utils';
 import { Settings } from '@gi-types/gio2';
+import { CredentialStorePort, CredentialType } from '@esync/core/ports';
+import { InMemoryCredentialStore } from '@esync/platform/credentials/inMemoryCredentialStore';
 
 export class PrefsViewModel {
   private settings: Settings;
+  private credentialStore: CredentialStorePort;
 
-  constructor(settings: Settings) {
+  constructor(settings: Settings, credentialStore: CredentialStorePort = new InMemoryCredentialStore()) {
     this.settings = settings;
+    this.credentialStore = credentialStore;
   }
 
   get provider(): SyncProviderType {
@@ -22,36 +26,22 @@ export class PrefsViewModel {
     return this.provider === provider;
   }
 
-  get githubGistId(): string {
-    return this.settings.get_string('github-gist-id');
+  async getRemoteId(provider: string): Promise<string> {
+    const val = await this.credentialStore.getCredential(provider, CredentialType.REMOTE_ID);
+    return val ?? '';
   }
 
-  setGithubGistId(id: string): void {
-    this.settings.set_string('github-gist-id', id);
+  async setRemoteId(provider: string, id: string): Promise<void> {
+    await this.credentialStore.setCredential(provider, CredentialType.REMOTE_ID, id);
   }
 
-  get githubUserToken(): string {
-    return this.settings.get_string('github-user-token');
+  async getToken(provider: string): Promise<string> {
+    const val = await this.credentialStore.getCredential(provider, CredentialType.TOKEN);
+    return val ?? '';
   }
 
-  setGithubUserToken(token: string): void {
-    this.settings.set_string('github-user-token', token);
-  }
-
-  get gitlabSnippetId(): string {
-    return this.settings.get_string('gitlab-snippet-id');
-  }
-
-  setGitlabSnippetId(id: string): void {
-    this.settings.set_string('gitlab-snippet-id', id);
-  }
-
-  get gitlabUserToken(): string {
-    return this.settings.get_string('gitlab-user-token');
-  }
-
-  setGitlabUserToken(token: string): void {
-    this.settings.set_string('gitlab-user-token', token);
+  async setToken(provider: string, token: string): Promise<void> {
+    await this.credentialStore.setCredential(provider, CredentialType.TOKEN, token);
   }
 
   get backupFileLocation(): string {

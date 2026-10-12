@@ -89,4 +89,9 @@ export const replaceFileContentsAsync = (file: File, contents: Uint8Array): Prom
   });
 };
 
+export const format = (str: string, ...args: any[]): string => {
+  let index = 0;
+  return str.replace(/%s/g, () => (index < args.length ? String(args[index++]) : ''));
+};
+
 export * from './disposables';

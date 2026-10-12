@@ -3,14 +3,18 @@ import { PrefsViewModel } from '@esync/prefs/prefsViewModel';
 import { SyncProviderType } from '@esync/api/types';
 import { DataProviderType } from '@esync/data';
 import { Settings } from '@gi-types/gio2';
+import { InMemoryCredentialStore } from '@esync/platform/credentials/inMemoryCredentialStore';
+import { CredentialType } from '@esync/core/ports';
 
 describe('PrefsViewModel', () => {
   let settings: Settings;
+  let credentialStore: InMemoryCredentialStore;
   let viewModel: PrefsViewModel;
 
   beforeEach(() => {
     settings = new Settings('org.gnome.shell.extensions.extensions-sync');
-    viewModel = new PrefsViewModel(settings);
+    credentialStore = new InMemoryCredentialStore();
+    viewModel = new PrefsViewModel(settings, credentialStore);
   });
 
   describe('provider settings', () => {
@@ -27,39 +31,27 @@ describe('PrefsViewModel', () => {
     });
   });
 
-  describe('github credentials', () => {
-    it('gets and sets github gist id and token', () => {
-      settings.set_string('github-gist-id', 'init-gist');
-      settings.set_string('github-user-token', 'init-token');
+  describe('credential storage', () => {
+    it('gets and sets credentials dynamically via credential store', async () => {
+      await viewModel.setRemoteId('github', 'new-gist');
+      await viewModel.setToken('github', 'new-token');
 
-      expect(viewModel.githubGistId).toBe('init-gist');
-      expect(viewModel.githubUserToken).toBe('init-token');
+      expect(await viewModel.getRemoteId('github')).toBe('new-gist');
+      expect(await viewModel.getToken('github')).toBe('new-token');
+      expect(await credentialStore.getCredential('github', CredentialType.REMOTE_ID)).toBe('new-gist');
+      expect(await credentialStore.getCredential('github', CredentialType.TOKEN)).toBe('new-token');
 
-      viewModel.setGithubGistId('new-gist');
-      viewModel.setGithubUserToken('new-token');
-
-      expect(settings.get_string('github-gist-id')).toBe('new-gist');
-      expect(settings.get_string('github-user-token')).toBe('new-token');
-      expect(viewModel.githubGistId).toBe('new-gist');
-      expect(viewModel.githubUserToken).toBe('new-token');
+      // Returns empty string if not found
+      expect(await viewModel.getRemoteId('unknown')).toBe('');
+      expect(await viewModel.getToken('unknown')).toBe('');
     });
-  });
 
-  describe('gitlab credentials', () => {
-    it('gets and sets gitlab snippet id and token', () => {
-      settings.set_string('gitlab-snippet-id', 'init-snippet');
-      settings.set_string('gitlab-user-token', 'init-token');
+    it('gets and sets gitlab credentials dynamically', async () => {
+      await viewModel.setRemoteId('gitlab', 'new-snippet');
+      await viewModel.setToken('gitlab', 'new-token');
 
-      expect(viewModel.gitlabSnippetId).toBe('init-snippet');
-      expect(viewModel.gitlabUserToken).toBe('init-token');
-
-      viewModel.setGitlabSnippetId('new-snippet');
-      viewModel.setGitlabUserToken('new-token');
-
-      expect(settings.get_string('gitlab-snippet-id')).toBe('new-snippet');
-      expect(settings.get_string('gitlab-user-token')).toBe('new-token');
-      expect(viewModel.gitlabSnippetId).toBe('new-snippet');
-      expect(viewModel.gitlabUserToken).toBe('new-token');
+      expect(await viewModel.getRemoteId('gitlab')).toBe('new-snippet');
+      expect(await viewModel.getToken('gitlab')).toBe('new-token');
     });
   });
 
@@ -75,43 +67,38 @@ describe('PrefsViewModel', () => {
   });
 
   describe('synced components', () => {
-    it('checks component sync status', () => {
-      // 1 << EXTENSIONS (1 << 0 = 1)
-      settings.set_flags('synced-components', 1);
+    it('checks if a component is enabled', () => {
+      settings.set_flags('synced-components', 1); // Only EXTENSIONS (1 << 0)
       expect(viewModel.isComponentSynced(DataProviderType.EXTENSIONS)).toBe(true);
       expect(viewModel.isComponentSynced(DataProviderType.KEYBINDINGS)).toBe(false);
       expect(viewModel.isComponentSynced(DataProviderType.TWEAKS)).toBe(false);
     });
 
-    it('enables and disables components properly', () => {
-      settings.set_flags('synced-components', 0);
-
-      // Enable EXTENSIONS
-      viewModel.setComponentSynced(DataProviderType.EXTENSIONS, true);
-      expect(viewModel.isComponentSynced(DataProviderType.EXTENSIONS)).toBe(true);
-
-      // Enable EXTENSIONS again (already enabled, no duplicate)
-      viewModel.setComponentSynced(DataProviderType.EXTENSIONS, true);
-      expect(viewModel.isComponentSynced(DataProviderType.EXTENSIONS)).toBe(true);
-
-      // Enable KEYBINDINGS
+    it('enables a previously disabled component', () => {
+      settings.set_flags('synced-components', 1); // Only EXTENSIONS
       viewModel.setComponentSynced(DataProviderType.KEYBINDINGS, true);
+
       expect(viewModel.isComponentSynced(DataProviderType.KEYBINDINGS)).toBe(true);
       expect(viewModel.isComponentSynced(DataProviderType.EXTENSIONS)).toBe(true);
+    });
 
-      // Disable EXTENSIONS
+    it('enabling an already enabled component keeps it enabled without duplicating', () => {
+      settings.set_flags('synced-components', 1);
+      viewModel.setComponentSynced(DataProviderType.EXTENSIONS, true);
+      expect(viewModel.isComponentSynced(DataProviderType.EXTENSIONS)).toBe(true);
+    });
+
+    it('disables an enabled component', () => {
+      settings.set_flags('synced-components', 3); // EXTENSIONS (1) | KEYBINDINGS (2)
       viewModel.setComponentSynced(DataProviderType.EXTENSIONS, false);
+
       expect(viewModel.isComponentSynced(DataProviderType.EXTENSIONS)).toBe(false);
       expect(viewModel.isComponentSynced(DataProviderType.KEYBINDINGS)).toBe(true);
-
-      // Disable EXTENSIONS again (already disabled)
-      viewModel.setComponentSynced(DataProviderType.EXTENSIONS, false);
-      expect(viewModel.isComponentSynced(DataProviderType.EXTENSIONS)).toBe(false);
     });
   });
 
   describe('general settings', () => {
-    it('gets and sets showTrayIcon', () => {
+    it('gets and sets show tray icon', () => {
       settings.set_boolean('show-tray-icon', true);
       expect(viewModel.showTrayIcon).toBe(true);
 
@@ -120,7 +107,7 @@ describe('PrefsViewModel', () => {
       expect(viewModel.showTrayIcon).toBe(false);
     });
 
-    it('gets and sets showNotifications', () => {
+    it('gets and sets show notifications', () => {
       settings.set_boolean('show-notifications', true);
       expect(viewModel.showNotifications).toBe(true);
 

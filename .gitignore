@@ -298,3 +298,6 @@ docs-lock.json
 reports/
 .stryker-tmp/
 stryker-setup-*.js
+
+# Python cache
+__pycache__/

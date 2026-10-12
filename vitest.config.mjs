@@ -11,6 +11,7 @@ export default defineConfig({
       { find: '@gi-types/st1', replacement: path.resolve(import.meta.dirname, 'tests/mocks/st1.ts') },
       { find: 'gi://Adw', replacement: path.resolve(import.meta.dirname, 'tests/mocks/adw.ts') },
       { find: 'gi://Gio', replacement: path.resolve(import.meta.dirname, 'tests/mocks/gio.ts') },
+      { find: 'gi://Secret', replacement: path.resolve(import.meta.dirname, 'tests/mocks/secret.ts') },
       { find: /^gi:\/\/Gtk.*/, replacement: path.resolve(import.meta.dirname, 'tests/mocks/gtk.ts') },
       {
         find: 'resource:///org/gnome/shell/ui/main.js',

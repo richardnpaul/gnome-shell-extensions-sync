@@ -1,0 +1,109 @@
+name: Release & Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      submit_to_ego:
+        description: 'Submit extension to extensions.gnome.org (EGO)'
+        type: boolean
+        required: true
+        default: true
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    name: Build, Attest, Release & Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-bin zip gettext gnome-shell
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Run unit tests with coverage
+        run: npm test
+
+      - name: Build extension package
+        run: npm run build:package
+
+      - name: Generate CycloneDX SBOM
+        run: npm run sbom
+
+      - name: Generate SHA-256 Checksums
+        run: npm run checksums
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install shexli
+        run: pip install shexli
+
+      - name: Run shexli static analysis
+        run: shexli dist/extensions-sync@richardnpaul.github.com.zip
+
+      - name: Attest Build Provenance
+        id: attest_provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: 'dist/extensions-sync@richardnpaul.github.com.zip'
+
+      - name: Attest CycloneDX SBOM
+        id: attest_sbom
+        uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+        with:
+          subject-path: 'dist/extensions-sync@richardnpaul.github.com.zip'
+          sbom-path: 'dist/extensions-sync@richardnpaul.github.com.sbom.json'
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          files: |
+            dist/extensions-sync@richardnpaul.github.com.zip
+            dist/extensions-sync@richardnpaul.github.com.sbom.json
+            dist/checksums.txt
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+
+      - name: Submit to extensions.gnome.org (EGO)
+        if: (github.event_name == 'push' || inputs.submit_to_ego == true) && env.EGO_USERNAME != '' && env.EGO_PASSWORD != ''
+        env:
+          EGO_USERNAME: ${{ secrets.EGO_USERNAME }}
+          EGO_PASSWORD: ${{ secrets.EGO_PASSWORD }}
+        run: |
+          echo "Submitting extension to extensions.gnome.org..."
+          gnome-extensions upload --accept-tos \
+            --user "$EGO_USERNAME" \
+            --password "$EGO_PASSWORD" \
+            dist/extensions-sync@richardnpaul.github.com.zip
+          echo "Successfully submitted to extensions.gnome.org!"
+
+      - name: Notice if EGO credentials are not configured
+        if: env.EGO_USERNAME == '' || env.EGO_PASSWORD == ''
+        env:
+          EGO_USERNAME: ${{ secrets.EGO_USERNAME }}
+          EGO_PASSWORD: ${{ secrets.EGO_PASSWORD }}
+        run: |
+          echo "::notice title=EGO Submission Skipped::EGO_USERNAME and/or EGO_PASSWORD secrets are not configured in repository settings. Automated upload to extensions.gnome.org was skipped."

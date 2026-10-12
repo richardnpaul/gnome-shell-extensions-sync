@@ -5,6 +5,7 @@ declare module 'resource:///org/gnome/shell/extensions/extension.js' {
     path: string;
     uuid: string;
     constructor(metadata: any);
+    initTranslations(domain?: string): void;
     getSettings(schema?: string): any;
     openPreferences(): void;
     enable(): void;
@@ -24,6 +25,8 @@ declare module 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js' {
     path: string;
     uuid: string;
     constructor(metadata?: any);
+    initTranslations(domain?: string): void;
+    gettext(str: string): string;
     getSettings(schema?: string): any;
     fillPreferencesWindow(window: any): Promise<void> | void;
     static lookupByURL(url: string): any;
@@ -85,6 +88,11 @@ declare module 'gi://Soup?version=3.0' {
 declare module 'gi://Gio' {
   const Gio: any;
   export default Gio;
+}
+
+declare module 'gi://Secret' {
+  const Secret: any;
+  export default Secret;
 }
 
 declare class TextEncoder {

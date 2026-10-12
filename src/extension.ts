@@ -8,6 +8,9 @@ import { DBus, DBusExportedObject } from '@gi-types/gio2';
 import { EventEmitter } from 'events';
 import { SyncEvent } from '@esync/api/types';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { CredentialStorePort } from '@esync/core/ports';
+import { SecretCredentialStore } from '@esync/platform/credentials/secretCredentialStore';
+import { CredentialMigrator } from '@esync/platform/credentials/credentialMigration';
 
 const debug = logger('extension');
 
@@ -18,9 +21,11 @@ export default class SyncExtension extends Extension {
   private eventEmitter?: EventEmitter;
   private data?: Data;
   private dbus?: DBusExportedObject;
+  private credentialStore?: CredentialStorePort;
 
   constructor(metadata: any) {
     super(metadata);
+    this.initTranslations();
     setCurrentExtension(this);
     debug('extension is initialized');
   }
@@ -37,18 +42,22 @@ export default class SyncExtension extends Extension {
     }
   }
 
-  enable(): void {
+  enable(credentialStore?: CredentialStorePort): void {
     setCurrentExtension(this);
+    this.credentialStore = credentialStore || new SecretCredentialStore();
+    const migrator = new CredentialMigrator(this.getSettings(), this.credentialStore);
+    migrator.migrate().catch((error) => debug(`credential migration error: ${error}`));
+
     this.eventEmitter = new EventEmitter();
     this.data = new Data();
-    this.api = new Api(this.eventEmitter, this.data);
+    this.api = new Api(this.eventEmitter, this.data, undefined, this.credentialStore);
     this.sync = new Sync(this.eventEmitter, this.data);
     this.statusMenu = new StatusMenu(this.eventEmitter);
 
-    const iface = loadInterfaceXML('io.elhan.ExtensionsSync');
+    const iface = loadInterfaceXML('com.github.richardnpaul.ExtensionsSync');
     if (iface) {
       this.dbus = DBusExportedObject.wrapJSObject(iface, this);
-      this.dbus.export(DBus.session, '/io/elhan/ExtensionsSync');
+      this.dbus.export(DBus.session, '/com/github/richardnpaul/ExtensionsSync');
     }
 
     this.sync.start();
@@ -77,6 +86,7 @@ export default class SyncExtension extends Extension {
       this.data.destroy();
       this.data = undefined;
     }
+    this.credentialStore = undefined;
     this.eventEmitter = undefined;
     debug('extension is disabled');
   }

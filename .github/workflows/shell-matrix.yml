@@ -1,0 +1,115 @@
+name: Shell Compatibility Matrix
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly run on Mondays at 04:00 UTC
+    - cron: '0 4 * * 1'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test-shell-versions:
+    name: GNOME ${{ matrix.gnome-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - gnome-version: '45'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-45'
+          - gnome-version: '46'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-46'
+          - gnome-version: '47'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-47'
+          - gnome-version: '48'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-48'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install host dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-bin zip gettext podman imagemagick
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build extension package
+        run: npm run build:package
+
+      - name: Run E2E Smoke Test in GNOME ${{ matrix.gnome-version }} Container
+        run: |
+          UUID="extensions-sync@richardnpaul.github.com"
+          ZIP="dist/${UUID}.zip"
+
+          echo "Starting container for GNOME ${{ matrix.gnome-version }}..."
+          POD=$(podman run --rm --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN -td ${{ matrix.image }})
+
+          run_in_pod() {
+            podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh "$@"
+          }
+
+          echo "Waiting for user session bus..."
+          sleep 3
+          run_in_pod wait-user-bus.sh
+
+          echo "Starting GNOME Shell inside container display :99..."
+          run_in_pod systemctl --user start "gnome-xsession@:99"
+          sleep 6
+
+          echo "Installing extension package..."
+          podman cp "${ZIP}" "${POD}:/home/gnomeshell/"
+          run_in_pod gnome-extensions install --force "${UUID}.zip"
+
+          echo "Enabling extension..."
+          run_in_pod gnome-extensions enable "${UUID}"
+          sleep 4
+
+          echo "Verifying extension status via D-Bus..."
+          INFO=$(run_in_pod gdbus call --session \
+            --dest org.gnome.Shell.Extensions \
+            --object-path /org/gnome/Shell/Extensions \
+            --method org.gnome.Shell.Extensions.GetExtensionInfo "${UUID}")
+
+          echo "Extension Info: ${INFO}"
+
+          # Extract framebuffer screenshot
+          podman cp "${POD}:/opt/Xvfb_screen0" ./framebuffer.xwd || true
+          if [ -f ./framebuffer.xwd ]; then
+            convert xwd:framebuffer.xwd "screenshot-gnome-${{ matrix.gnome-version }}.png" || true
+          fi
+
+          if echo "${INFO}" | grep -q "'state': <uint32 1>"; then
+            echo "SUCCESS: Extension is ACTIVE in GNOME ${{ matrix.gnome-version }}!"
+          else
+            echo "ERROR: Extension failed to activate in GNOME ${{ matrix.gnome-version }}!"
+            echo "=== Journal logs ==="
+            run_in_pod journalctl --user -u "gnome-xsession@:99" --no-pager -n 80 || true
+            podman stop "${POD}"
+            exit 1
+          fi
+
+          podman stop "${POD}"
+
+      - name: Upload Framebuffer Screenshot
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: screenshot-gnome-${{ matrix.gnome-version }}
+          path: screenshot-gnome-${{ matrix.gnome-version }}.png
+          if-no-files-found: ignore

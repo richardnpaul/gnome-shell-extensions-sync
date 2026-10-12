@@ -1,16 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk?version=4.0';
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import { SyncProviderType } from '@esync/api/types';
 import { DataProviderType } from '@esync/data';
-
-const _ = (str: string): string => str;
+import { CredentialStorePort, CredentialType } from '@esync/core/ports';
+import { SecretCredentialStore } from '@esync/platform/credentials/secretCredentialStore';
+import { CredentialMigrator } from '@esync/platform/credentials/credentialMigration';
 
 export default class ExtensionsSyncPreferences extends ExtensionPreferences {
-  fillPreferencesWindow(window: any): void {
+  async fillPreferencesWindow(window: any): Promise<void> {
+    this.initTranslations();
+    const _ = (str: string): string => this.gettext(str);
     const settings = this.getSettings();
     window._settings = settings;
+
+    const credentialStore: CredentialStorePort = window._credentialStore || new SecretCredentialStore();
+    window._credentialStore = credentialStore;
+
+    const migrator = new CredentialMigrator(settings, credentialStore);
+    await migrator.migrate();
+
+    const [githubCreds, gitlabCreds] = await Promise.all([
+      credentialStore.getProviderCredentials('github'),
+      credentialStore.getProviderCredentials('gitlab'),
+    ]);
 
     // --- Provider Page ---
     const providerPage = new Adw.PreferencesPage({
@@ -45,19 +60,19 @@ export default class ExtensionsSyncPreferences extends ExtensionPreferences {
     });
     const gistIdRow = new Adw.EntryRow({
       title: _('Gist ID'),
-      text: settings.get_string('github-gist-id'),
+      text: githubCreds.remoteId || '',
     });
     gistIdRow.connect('changed', (row: any) => {
-      settings.set_string('github-gist-id', row.get_text());
+      credentialStore.setCredential('github', CredentialType.REMOTE_ID, row.get_text());
     });
     githubGroup.add(gistIdRow);
 
     const githubTokenRow = new Adw.PasswordEntryRow({
       title: _('GitHub Token'),
-      text: settings.get_string('github-user-token'),
+      text: githubCreds.token || '',
     });
     githubTokenRow.connect('changed', (row: any) => {
-      settings.set_string('github-user-token', row.get_text());
+      credentialStore.setCredential('github', CredentialType.TOKEN, row.get_text());
     });
     githubGroup.add(githubTokenRow);
     providerPage.add(githubGroup);
@@ -69,19 +84,19 @@ export default class ExtensionsSyncPreferences extends ExtensionPreferences {
     });
     const snippetIdRow = new Adw.EntryRow({
       title: _('Snippet ID'),
-      text: settings.get_string('gitlab-snippet-id'),
+      text: gitlabCreds.remoteId || '',
     });
     snippetIdRow.connect('changed', (row: any) => {
-      settings.set_string('gitlab-snippet-id', row.get_text());
+      credentialStore.setCredential('gitlab', CredentialType.REMOTE_ID, row.get_text());
     });
     gitlabGroup.add(snippetIdRow);
 
     const gitlabTokenRow = new Adw.PasswordEntryRow({
       title: _('GitLab Token'),
-      text: settings.get_string('gitlab-user-token'),
+      text: gitlabCreds.token || '',
     });
     gitlabTokenRow.connect('changed', (row: any) => {
-      settings.set_string('gitlab-user-token', row.get_text());
+      credentialStore.setCredential('gitlab', CredentialType.TOKEN, row.get_text());
     });
     gitlabGroup.add(gitlabTokenRow);
     providerPage.add(gitlabGroup);
@@ -109,7 +124,7 @@ export default class ExtensionsSyncPreferences extends ExtensionPreferences {
         initial_name: 'extensions-sync-backup.json',
       });
       const filter = new Gtk.FileFilter();
-      filter.set_name('JSON files (*.json)');
+      filter.set_name(_('JSON files (*.json)'));
       filter.add_pattern('*.json');
       const filters = new Gio.ListStore({ item_type: Gtk.FileFilter });
       filters.append(filter);

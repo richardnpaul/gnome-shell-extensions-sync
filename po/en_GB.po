@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into British English (en_GB)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: British English Translators\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Sync Settings"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Upload"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Download"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Preferences"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Provider"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Sync Provider"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Select the cloud or local service to sync your settings with."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Local"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "GitHub Settings"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Create a secret Gist on gist.github.com and generate a personal access token."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "Gist ID"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "GitHub Token"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "GitLab Settings"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Create a private snippet on gitlab.com and generate an access token."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "Snippet ID"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "GitLab Token"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Local Backup Settings"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Save and restore your configuration to/from a local JSON file."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Backup File Location"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "No file selected"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Browse…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Select Backup File Location"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Synced Data"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Synchronised Components"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Choose which components will be uploaded and downloaded."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Extensions"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Sync all user extensions and their dconf configurations"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Keybindings"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Sync all GNOME Shell and GTK window/media keybindings"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Tweaks"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Sync GNOME desktop theme, font, interface and tweak settings"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "General"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Behaviour and Interface"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Show Tray Icon"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Display the sync status icon in the top panel"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Show Notifications"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Display desktop notifications on sync progress and errors"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Failed to apply sync data to current system."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Extensions are updated. Reloading GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Extensions are updated. Please reload GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Settings successfully saved to %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Error occurred while saving settings to %s. Please check the logs."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Error occurred while reading settings from %s. Please check the logs."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

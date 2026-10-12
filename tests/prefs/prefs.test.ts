@@ -3,37 +3,49 @@ import ExtensionsSyncPreferences from '@esync/prefs/prefs';
 import { SyncProviderType } from '@esync/api/types';
 import { DataProviderType } from '@esync/data';
 import { Settings } from '@gi-types/gio2';
+import { InMemoryCredentialStore } from '@esync/platform/credentials/inMemoryCredentialStore';
+import { CredentialType } from '@esync/core/ports';
 import Gtk from 'gi://Gtk?version=4.0';
 import Gio from 'gi://Gio';
 
 describe('prefs/prefs', () => {
   let prefs: ExtensionsSyncPreferences;
   let mockSettings: Settings;
-  let mockWindow: { pages: any[]; add: (p: any) => void; _settings?: any };
+  let mockCredentialStore: InMemoryCredentialStore;
+  let mockWindow: { pages: any[]; add: (p: any) => void; _settings?: any; _credentialStore?: any };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     mockSettings = new Settings({
       provider: SyncProviderType.GITHUB,
-      'github-gist-id': 'my-gist',
-      'github-user-token': 'my-gh-token',
-      'gitlab-snippet-id': 'my-snippet',
-      'gitlab-user-token': 'my-gl-token',
+      'github-gist-id': '',
+      'github-user-token': '',
+      'gitlab-snippet-id': '',
+      'gitlab-user-token': '',
       'backup-file-location': 'file:///backup.json',
       'data-providers': 7, // 1 | 2 | 4
     });
+    mockCredentialStore = new InMemoryCredentialStore();
+    await mockCredentialStore.setCredential('github', CredentialType.REMOTE_ID, 'my-gist');
+    await mockCredentialStore.setCredential('github', CredentialType.TOKEN, 'my-gh-token');
+    await mockCredentialStore.setCredential('gitlab', CredentialType.REMOTE_ID, 'my-snippet');
+    await mockCredentialStore.setCredential('gitlab', CredentialType.TOKEN, 'my-gl-token');
+
     mockWindow = {
       pages: [],
       add(p: any) {
         this.pages.push(p);
       },
+      _credentialStore: mockCredentialStore,
     };
     prefs = new ExtensionsSyncPreferences(mockSettings);
   });
 
-  it('builds preferences window with 3 pages and assigns _settings', () => {
-    prefs.fillPreferencesWindow(mockWindow);
+  it('builds preferences window with 3 pages and assigns _settings', async () => {
+    const initTranslationsSpy = vi.spyOn(prefs, 'initTranslations');
+    await prefs.fillPreferencesWindow(mockWindow);
 
+    expect(initTranslationsSpy).toHaveBeenCalled();
     expect(mockWindow._settings).toBe(mockSettings);
     expect(mockWindow.pages.length).toBe(3);
 
@@ -106,9 +118,24 @@ describe('prefs/prefs', () => {
     expect(generalGroup.rows[1].subtitle).toBe('Display desktop notifications on sync progress and errors');
   });
 
+  it('defaults to SecretCredentialStore and empty entry rows when window._credentialStore is omitted', async () => {
+    delete mockWindow._credentialStore;
+    await prefs.fillPreferencesWindow(mockWindow);
+    expect(mockWindow._credentialStore).toBeDefined();
+
+    const providerPage = mockWindow.pages[0];
+    const githubGroup = providerPage.groups[1];
+    expect(githubGroup.rows[0].text).toBe('');
+    expect(githubGroup.rows[1].text).toBe('');
+
+    const gitlabGroup = providerPage.groups[2];
+    expect(gitlabGroup.rows[0].text).toBe('');
+    expect(gitlabGroup.rows[1].text).toBe('');
+  });
+
   describe('provider selection and visibility', () => {
-    it('sets initial visibility based on activeProvider (GITHUB)', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('sets initial visibility based on activeProvider (GITHUB)', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const providerPage = mockWindow.pages[0];
       const githubGroup = providerPage.groups[1];
@@ -120,9 +147,9 @@ describe('prefs/prefs', () => {
       expect(localGroup.visible).toBe(false);
     });
 
-    it('sets initial visibility based on activeProvider (GITLAB)', () => {
+    it('sets initial visibility based on activeProvider (GITLAB)', async () => {
       mockSettings.set_enum('provider', SyncProviderType.GITLAB);
-      prefs.fillPreferencesWindow(mockWindow);
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const providerPage = mockWindow.pages[0];
       const comboRow = providerPage.groups[0].rows[0];
@@ -136,8 +163,8 @@ describe('prefs/prefs', () => {
       expect(localGroup.visible).toBe(false);
     });
 
-    it('updates visibility and setting when combo selection changes to GITLAB', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('updates visibility and setting when combo selection changes to GITLAB', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const providerPage = mockWindow.pages[0];
       const providerSelectionGroup = providerPage.groups[0];
@@ -157,8 +184,8 @@ describe('prefs/prefs', () => {
       expect(localGroup.visible).toBe(false);
     });
 
-    it('updates visibility and setting when combo selection changes to LOCAL', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('updates visibility and setting when combo selection changes to LOCAL', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const providerPage = mockWindow.pages[0];
       const comboRow = providerPage.groups[0].rows[0];
@@ -174,8 +201,8 @@ describe('prefs/prefs', () => {
   });
 
   describe('credential entry rows', () => {
-    it('updates GitHub settings on entry changed', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('updates GitHub credentials in credentialStore on entry changed', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const githubGroup = mockWindow.pages[0].groups[1];
       const gistIdRow = githubGroup.rows[0];
@@ -183,15 +210,15 @@ describe('prefs/prefs', () => {
 
       gistIdRow.text = 'new-gist-id';
       gistIdRow.signals.changed(gistIdRow);
-      expect(mockSettings.get_string('github-gist-id')).toBe('new-gist-id');
+      expect(await mockCredentialStore.getCredential('github', CredentialType.REMOTE_ID)).toBe('new-gist-id');
 
       tokenRow.text = 'new-gh-token';
       tokenRow.signals.changed(tokenRow);
-      expect(mockSettings.get_string('github-user-token')).toBe('new-gh-token');
+      expect(await mockCredentialStore.getCredential('github', CredentialType.TOKEN)).toBe('new-gh-token');
     });
 
-    it('updates GitLab settings on entry changed', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('updates GitLab credentials in credentialStore on entry changed', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const gitlabGroup = mockWindow.pages[0].groups[2];
       const snippetIdRow = gitlabGroup.rows[0];
@@ -199,26 +226,26 @@ describe('prefs/prefs', () => {
 
       snippetIdRow.text = 'new-snippet-id';
       snippetIdRow.signals.changed(snippetIdRow);
-      expect(mockSettings.get_string('gitlab-snippet-id')).toBe('new-snippet-id');
+      expect(await mockCredentialStore.getCredential('gitlab', CredentialType.REMOTE_ID)).toBe('new-snippet-id');
 
       tokenRow.text = 'new-gl-token';
       tokenRow.signals.changed(tokenRow);
-      expect(mockSettings.get_string('gitlab-user-token')).toBe('new-gl-token');
+      expect(await mockCredentialStore.getCredential('gitlab', CredentialType.TOKEN)).toBe('new-gl-token');
     });
   });
 
   describe('local file picker dialog', () => {
-    it('shows No file selected if backup location is empty', () => {
+    it('shows No file selected if backup location is empty', async () => {
       mockSettings.set_string('backup-file-location', '');
-      prefs.fillPreferencesWindow(mockWindow);
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const localGroup = mockWindow.pages[0].groups[3];
       const backupFileRow = localGroup.rows[0];
       expect(backupFileRow.subtitle).toBe('No file selected');
     });
 
-    it('handles file selection from file dialog when file does not exist', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('handles file selection from file dialog when file does not exist', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const localGroup = mockWindow.pages[0].groups[3];
       const backupFileRow = localGroup.rows[0];
@@ -247,8 +274,8 @@ describe('prefs/prefs', () => {
       expect(backupFileRow.subtitle).toBe('file:///new/backup.json');
     });
 
-    it('handles file selection when file already exists', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('handles file selection when file already exists', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const localGroup = mockWindow.pages[0].groups[3];
       const backupFileRow = localGroup.rows[0];
@@ -269,8 +296,8 @@ describe('prefs/prefs', () => {
       expect(backupFileRow.subtitle).toBe('file:///existing/backup.json');
     });
 
-    it('handles cancelled file selection gracefully', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('handles cancelled file selection gracefully', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const localGroup = mockWindow.pages[0].groups[3];
       const backupFileRow = localGroup.rows[0];
@@ -284,9 +311,9 @@ describe('prefs/prefs', () => {
   });
 
   describe('synced data components switches', () => {
-    it('initializes switches and updates flags when toggled on and off', () => {
+    it('initializes switches and updates flags when toggled on and off', async () => {
       mockSettings.set_flags('data-providers', 1); // Only EXTENSIONS active
-      prefs.fillPreferencesWindow(mockWindow);
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const syncedPage = mockWindow.pages[1];
       const switchesGroup = syncedPage.groups[0];
@@ -312,8 +339,8 @@ describe('prefs/prefs', () => {
   });
 
   describe('general page settings binding', () => {
-    it('binds show-tray-icon and show-notifications', () => {
-      prefs.fillPreferencesWindow(mockWindow);
+    it('binds show-tray-icon and show-notifications', async () => {
+      await prefs.fillPreferencesWindow(mockWindow);
 
       const generalPage = mockWindow.pages[2];
       const generalGroup = generalPage.groups[0];

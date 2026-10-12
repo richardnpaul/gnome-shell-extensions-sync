@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<schemalist gettext-domain="gnome-shell-extensions">
+<schemalist gettext-domain="extensions-sync@richardnpaul.github.com">
   <enum id="org.gnome.shell.extensions.extensions-sync.provider">
     <value nick="Github" value="0" />
     <value nick="Gitlab" value="1" />

@@ -8,6 +8,7 @@ import {
   enumListToSettingsFlags,
   readFileContentsAsync,
   replaceFileContentsAsync,
+  format,
 } from '@esync/utils';
 import { Subprocess, File } from '@gi-types/gio2';
 import { timeout_add, Source } from '@gi-types/glib2';
@@ -138,6 +139,24 @@ describe('utils', () => {
       });
 
       await expect(replaceFileContentsAsync(file, data)).rejects.toThrow('replace failed');
+    });
+  });
+
+  describe('format', () => {
+    it('formats string with single %s placeholder', () => {
+      expect(format('Hello %s', 'World')).toBe('Hello World');
+    });
+
+    it('formats string with multiple %s placeholders', () => {
+      expect(format('%s has %s items', 'User', 5)).toBe('User has 5 items');
+    });
+
+    it('returns original string when no placeholders exist', () => {
+      expect(format('No placeholders here')).toBe('No placeholders here');
+    });
+
+    it('handles more placeholders than arguments', () => {
+      expect(format('Missing %s %s', 'one')).toBe('Missing one ');
     });
   });
 });

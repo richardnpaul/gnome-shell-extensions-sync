@@ -2,6 +2,9 @@ import { execute, logger, replaceFileContentsAsync } from '@esync/utils';
 import { File, file_new_tmp, Settings } from '@gi-types/gio2';
 import { PRIORITY_DEFAULT } from '@gi-types/glib2';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
+
+export { _ };
 
 const debug = logger('shell');
 
@@ -104,14 +107,14 @@ export const readDconfData = async (schemaPath: string): Promise<string> => {
 };
 
 export const DBUS_INTERFACE_EXTENSIONS_SYNC = `<node>
-  <interface name="io.elhan.ExtensionsSync">
+  <interface name="com.github.richardnpaul.ExtensionsSync">
     <method name="save" />
     <method name="read" />
   </interface>
 </node>`;
 
 export const loadInterfaceXML = (iface: string): any => {
-  if (iface === 'io.elhan.ExtensionsSync') {
+  if (iface === 'com.github.richardnpaul.ExtensionsSync') {
     return DBUS_INTERFACE_EXTENSIONS_SYNC;
   }
   return null;

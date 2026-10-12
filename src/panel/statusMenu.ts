@@ -1,5 +1,5 @@
 import { SyncEvent } from '@esync/api/types';
-import { getCurrentExtension, getCurrentExtensionSettings, ShellExtension } from '@esync/shell';
+import { _, getCurrentExtension, getCurrentExtensionSettings, ShellExtension } from '@esync/shell';
 import { execute, logger } from '@esync/utils';
 import { icon_new_for_string, Settings } from '@gi-types/gio2';
 import { Icon } from '@gi-types/st1';
@@ -7,7 +7,6 @@ import { EventEmitter } from 'events';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
-const _ = (str: string): string => str;
 
 const debug = logger('statusMenu');
 

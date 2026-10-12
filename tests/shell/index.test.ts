@@ -12,6 +12,7 @@ import {
   readDconfData,
   loadInterfaceXML,
   DBUS_INTERFACE_EXTENSIONS_SYNC,
+  _,
 } from '@esync/shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import { Settings, File, file_new_tmp, FileCreateFlags } from '@gi-types/gio2';
@@ -138,16 +139,22 @@ describe('shell/index', () => {
   });
 
   describe('loadInterfaceXML', () => {
-    it('returns DBUS_INTERFACE_EXTENSIONS_SYNC for io.elhan.ExtensionsSync', () => {
-      const result = loadInterfaceXML('io.elhan.ExtensionsSync');
+    it('returns DBUS_INTERFACE_EXTENSIONS_SYNC for com.github.richardnpaul.ExtensionsSync', () => {
+      const result = loadInterfaceXML('com.github.richardnpaul.ExtensionsSync');
       expect(result).toBe(DBUS_INTERFACE_EXTENSIONS_SYNC);
-      expect(result).toContain('<interface name="io.elhan.ExtensionsSync">');
+      expect(result).toContain('<interface name="com.github.richardnpaul.ExtensionsSync">');
     });
 
     it('returns null for other interface names', () => {
       expect(loadInterfaceXML('test')).toBeNull();
-      expect(loadInterfaceXML('io.elhan.test')).toBeNull();
+      expect(loadInterfaceXML('com.github.richardnpaul.test')).toBeNull();
       expect(loadInterfaceXML('bad-iface')).toBeNull();
+    });
+  });
+
+  describe('_', () => {
+    it('translates strings using gettext', () => {
+      expect(_('Settings')).toBe('Settings');
     });
   });
 });

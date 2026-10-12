@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Fijian (fj)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Fijian Translators\n"
+"Language: fj\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Veisau ni Vakaduavatataki"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Vakavodoka"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Lavaka"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Digidigi"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Dauveiqaravi"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Dauveiqaravi ni Vakaduavatataki"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Digia na o se veiqaravi e loma me vakaduavatataki kina na nomu veisau."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "E loma"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "Veisau ni GitHub"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Bulia e dua na Gist vuni ena gist.github.com ka vakatubura na taucoko ni curu."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "Naba ni Gist"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "Taucoko ni GitHub"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "Veisau ni GitLab"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Bulia e dua na snippet vuni ena gitlab.com ka vakatubura na taucoko ni curu."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "Naba ni Snippet"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "Taucoko ni GitLab"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Veisau ni Maroroi e Loma"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Maroroya ka vakalesuya mai na nomu ituvatuva mai na faile JSON e loma."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Tikina e Maroroi Kina na Faile"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Sega ni digitaki e dua na faile"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Vakasaqara…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Digia na Tikina e Maroroi Kina na Faile"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Tukutuku sa Vakaduavatataki"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Veitiki sa Vakaduavatataki"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Digia na veitiki cava me vakavodoki se lavaki."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Kuri"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Vakaduavatataka kece na kuri ni vakayagataka kei na dconf ituvatuva"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Vakanomodi ni Tabaikau"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Vakaduavatataka na vakanomodi kece ni GNOME Shell kei na GTK"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Veisautaki"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Vakaduavatataka na ulutaga, matanivola, kei na ituvatuva ni GNOME"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Raraba"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Itovo kei na Matana"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Vakaraitaka na iVakatakilakila ena Tere"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Vakaraitaka na iVakatakilakila ni vakaduavatataki ena pannel e cake"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Vakaraitaka na iTukutuku"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Vakaraitaka na itukutuku ena toso kei na cala"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Dredre ni vakayagataki na tukutuku vakaduavatataki ki na ivakarau oqo."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Sa vakavoutaki na kuri. Vakalavotaki tale na GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Sa vakavoutaki na kuri. Yalovinaka vakalavota tale na GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Sa maroroi vinaka na veisau ki na %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "E yaco e dua na cala ena maroroi ni veisau ki na %s. Yalovinaka raica na lisi ni tukutuku."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "E yaco e dua na cala ena wiliki ni veisau mai na %s. Yalovinaka raica na lisi ni tukutuku."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

@@ -1,5 +1,5 @@
 <node>
-  <interface name="io.elhan.ExtensionsSync">
+  <interface name="com.github.richardnpaul.ExtensionsSync">
     <method name="save" />
     <method name="read" />
   </interface>

@@ -3,6 +3,8 @@ import { Api } from '@esync/api';
 import { SyncEvent, SyncOperationStatus, SyncProviderType } from '@esync/api/types';
 import { EventEmitter } from 'events';
 import { Settings } from '@gi-types/gio2';
+import { InMemoryCredentialStore } from '@esync/platform/credentials/inMemoryCredentialStore';
+import { SecretCredentialStore } from '@esync/platform/credentials/secretCredentialStore';
 import * as shell from '@esync/shell';
 
 describe('api/index', () => {
@@ -43,9 +45,14 @@ describe('api/index', () => {
       const logSpy = vi.spyOn(globalThis as any, 'log');
       const api = new Api(eventEmitter, mockData);
       expect((api as any).provider.getName()).toBe('Github');
-      expect((api as any).provider.gistId).toBe('gist123');
-      expect((api as any).provider.userToken).toBe('token123');
+      expect((api as any).provider.credentialStore).toBeInstanceOf(SecretCredentialStore);
+      expect((api as any).credentialStore).toBeInstanceOf(SecretCredentialStore);
       expect(logSpy).toHaveBeenCalledWith('[extensions-sync] [api] changing provider to GITHUB');
+
+      const customStore = new InMemoryCredentialStore();
+      const customApi = new Api(eventEmitter, mockData, undefined, customStore);
+      expect((customApi as any).credentialStore).toBe(customStore);
+      expect((customApi as any).provider.credentialStore).toBe(customStore);
     });
 
     it('creates GitLab provider when GITLAB is selected', () => {
@@ -53,8 +60,7 @@ describe('api/index', () => {
       mockSettings.set_enum('provider', SyncProviderType.GITLAB);
       const api = new Api(eventEmitter, mockData);
       expect((api as any).provider.getName()).toBe('Gitlab');
-      expect((api as any).provider.snippetId).toBe('snip123');
-      expect((api as any).provider.userToken).toBe('gltoken123');
+      expect((api as any).provider.credentialStore).toBeDefined();
       expect(logSpy).toHaveBeenCalledWith('[extensions-sync] [api] changing provider to GITLAB');
     });
 

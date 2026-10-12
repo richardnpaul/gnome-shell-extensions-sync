@@ -8,5 +8,6 @@
   },
   "settings-schema": "org.gnome.shell.extensions.extensions-sync",
   "url": "https://github.com/oae/gnome-shell-extensions-sync",
+  "gettext-domain": "extensions-sync@richardnpaul.github.com",
   "shell-version": ["45", "46", "47", "48"]
 }
