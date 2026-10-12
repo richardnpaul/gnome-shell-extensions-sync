@@ -27,7 +27,7 @@ export class Subprocess {
   public static lastInstance: Subprocess | null = null;
 
   constructor(options: { argv?: string[]; flags?: SubprocessFlags }) {
-    if (!options?.argv || options.argv[0] !== 'bash' || options.argv[1] !== '-c' || options.argv.length !== 3) {
+    if (!options?.argv || !Array.isArray(options.argv) || options.argv.length === 0) {
       throw new Error(`Invalid argv: ${JSON.stringify(options?.argv)}`);
     }
     if (options.flags !== SubprocessFlags.STDOUT_PIPE) {
@@ -238,8 +238,15 @@ export const file_new_tmp = vi.fn((_tmpl: any): [File, any] => {
 
 export const icon_new_for_string = vi.fn((name: string) => ({ name }));
 
+export enum DBusCallFlags {
+  NONE = 0,
+}
+
 export const DBus = {
-  session: {},
+  session: {
+    call: vi.fn(),
+    call_finish: vi.fn(),
+  },
 };
 
 export class DBusExportedObject {

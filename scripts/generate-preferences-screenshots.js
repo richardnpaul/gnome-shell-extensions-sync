@@ -33,10 +33,7 @@ function capturePage(window, outPath) {
 }
 
 async function renderPage(pageIndex, outPath) {
-  let extPath = GLib.build_filenamev([
-    GLib.get_current_dir(),
-    'dist',
-  ]);
+  let extPath = GLib.build_filenamev([GLib.get_current_dir(), 'dist']);
   const distMetadata = Gio.File.new_for_path(`${extPath}/metadata.json`);
   if (!distMetadata.query_exists(null)) {
     extPath = GLib.build_filenamev([

@@ -23,13 +23,13 @@ jobs:
       matrix:
         include:
           - gnome-version: '45'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-45'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-39:v19@sha256:c6e1d84b05a674d5e8df9a1c08c7ab7119b773b5765bc06e415172a85728cc2f'
           - gnome-version: '46'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-46'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-40:v19@sha256:828d60a92162ee07581490be872f253d0c1fea48003d4c62b75c46006d2fd2d6'
           - gnome-version: '47'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-47'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-41:v19@sha256:0e37a2fa4f608ceb7d9ef9c84a81244775fccbf7111c7b31b7fbaddd10e1c14c'
           - gnome-version: '48'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-48'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-rawhide@sha256:6987ec31fb1209a78b43c49d65f3ecd7045604f8e653bde0720344b04036e520'
 
     steps:
       - name: Checkout repository

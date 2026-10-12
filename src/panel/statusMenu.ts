@@ -1,6 +1,6 @@
 import { SyncEvent } from '@esync/api/types';
 import { _, getCurrentExtension, getCurrentExtensionSettings, ShellExtension } from '@esync/shell';
-import { execute, logger } from '@esync/utils';
+import { logger } from '@esync/utils';
 import { icon_new_for_string, Settings } from '@gi-types/gio2';
 import { Icon } from '@gi-types/st1';
 import { EventEmitter } from 'events';
@@ -98,13 +98,7 @@ export class StatusMenu {
     newButton.menu.addMenuItem(
       this.createMenuItem(_('Preferences'), 'preferences', () => {
         const ext = getCurrentExtension();
-        if (ext && typeof ext.openPreferences === 'function') {
-          ext.openPreferences();
-        } else {
-          execute(
-            `gnome-extensions prefs "${this.extension?.metadata?.uuid || 'extensions-sync@richardnpaul.github.com'}"`,
-          );
-        }
+        ext?.openPreferences();
       }),
     );
 

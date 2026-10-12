@@ -16,9 +16,9 @@ export const setTimeout = (func: () => any, millis: number): number => {
 
 export const clearTimeout = (id: number): boolean => Source.remove(id);
 
-export const execute = async (command: string): Promise<string> => {
+export const execute = async (command: string | string[]): Promise<string> => {
   const process = new Subprocess({
-    argv: ['bash', '-c', command],
+    argv: Array.isArray(command) ? command : ['bash', '-c', command],
     flags: SubprocessFlags.STDOUT_PIPE,
   });
 

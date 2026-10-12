@@ -13,6 +13,7 @@ const giDefinitions = {
     exports: [
       'AsyncResult',
       'DBus',
+      'DBusCallFlags',
       'DBusExportedObject',
       'File',
       'FileCreateFlags',
@@ -36,6 +37,7 @@ const giDefinitions = {
       'file_get_contents',
       'get_user_data_dir',
       'get_user_config_dir',
+      'Variant',
     ],
   },
   '@gi-types/gobject2': {

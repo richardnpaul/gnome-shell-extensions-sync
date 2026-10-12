@@ -1,0 +1,101 @@
+name: Tag Release on Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name to create and push (e.g. v1.0.0)'
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: read
+  actions: write
+
+jobs:
+  tag-and-trigger-release:
+    name: Tag & Trigger Release
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       startsWith(github.event.pull_request.head.ref, 'release/v'))
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN || secrets.PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Resolve and validate release tag
+        id: resolve_tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG_NAME="${{ inputs.tag_name }}"
+          else
+            BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+            TAG_NAME="${BRANCH_NAME#release/}"
+          fi
+
+          # Validate semantic versioning format vX.Y.Z
+          if [[ ! "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "::error::Tag '$TAG_NAME' does not match expected format v*.*.* (e.g. v0.1.0)"
+            exit 1
+          fi
+
+          echo "Resolved release tag: $TAG_NAME"
+          echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag already exists
+        id: check_tag
+        env:
+          TAG_NAME: ${{ steps.resolve_tag.outputs.tag_name }}
+        run: |
+          if git rev-parse "refs/tags/$TAG_NAME" >/dev/null 2>&1; then
+            echo "Tag $TAG_NAME already exists in repository."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Tag $TAG_NAME does not exist yet."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create and push release tag
+        if: steps.check_tag.outputs.exists == 'false'
+        env:
+          TAG_NAME: ${{ steps.resolve_tag.outputs.tag_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          echo "Creating annotated tag $TAG_NAME..."
+          git tag -a "$TAG_NAME" -m "Release $TAG_NAME"
+          git push origin "$TAG_NAME"
+          echo "Successfully pushed tag $TAG_NAME to repository."
+
+      - name: Kick off Release & Publish pipeline
+        env:
+          TAG_NAME: ${{ steps.resolve_tag.outputs.tag_name }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          # If a custom PAT was used to push, GitHub will trigger on: push: tags: ['v*'] automatically.
+          # If the default GITHUB_TOKEN was used, GitHub suppresses recursive push events,
+          # so we explicitly dispatch release.yml on the newly pushed tag ref.
+          if [ -z "${{ secrets.RELEASE_TOKEN }}" ] && [ -z "${{ secrets.PAT }}" ]; then
+            echo "Triggering release.yml via workflow_dispatch for tag $TAG_NAME..."
+            gh workflow run release.yml --ref "$TAG_NAME"
+            echo "Release & Publish pipeline triggered successfully for $TAG_NAME."
+          else
+            echo "Tag was pushed with custom token; push event will automatically trigger release pipeline."
+          fi

@@ -4,7 +4,6 @@ import { SyncEvent } from '@esync/api/types';
 import { EventEmitter } from 'events';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as shell from '@esync/shell';
-import * as utils from '@esync/utils';
 import { Settings } from '@gi-types/gio2';
 
 describe('panel/statusMenu', () => {
@@ -171,47 +170,14 @@ describe('panel/statusMenu', () => {
       expect(openPreferencesMock).toHaveBeenCalled();
     });
 
-    it('executes gnome-extensions prefs command when openPreferences is not available', () => {
-      shell.setCurrentExtension({
-        path: '/ext/path',
-        metadata: { uuid: 'extensions-sync@richardnpaul.github.com' },
-      });
-      const execSpy = vi.spyOn(utils, 'execute').mockResolvedValue('');
-
-      const menu = new StatusMenu(eventEmitter);
-      menu.show();
-      const button = (menu as any).button;
-      const prefsItem = button.menu.addMenuItem.mock.calls[3][0];
-
-      prefsItem.callbacks.activate();
-      expect(execSpy).toHaveBeenCalledWith('gnome-extensions prefs "extensions-sync@richardnpaul.github.com"');
-    });
-
-    it('falls back to default uuid when extension metadata is null in preferences handler', () => {
-      shell.setCurrentExtension({ path: '/ext/path', metadata: null as any });
-      const execSpy = vi.spyOn(utils, 'execute').mockResolvedValue('');
-
-      const menu = new StatusMenu(eventEmitter);
-      menu.show();
-      const button = (menu as any).button;
-      const prefsItem = button.menu.addMenuItem.mock.calls[3][0];
-
-      prefsItem.callbacks.activate();
-      expect(execSpy).toHaveBeenCalledWith('gnome-extensions prefs "extensions-sync@richardnpaul.github.com"');
-    });
-
-    it('falls back to default uuid when this.extension is null in preferences handler', () => {
+    it('does nothing when extension is null upon clicking preferences', () => {
       shell.setCurrentExtension(null);
-      const execSpy = vi.spyOn(utils, 'execute').mockResolvedValue('');
-
       const menu = new StatusMenu(eventEmitter);
-      (menu as any).extension = null;
       menu.show();
       const button = (menu as any).button;
       const prefsItem = button.menu.addMenuItem.mock.calls[3][0];
 
-      prefsItem.callbacks.activate();
-      expect(execSpy).toHaveBeenCalledWith('gnome-extensions prefs "extensions-sync@richardnpaul.github.com"');
+      expect(() => prefsItem.callbacks.activate()).not.toThrow();
     });
 
     it('falls back to empty base path when extension is null', () => {

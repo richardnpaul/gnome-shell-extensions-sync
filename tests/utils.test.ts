@@ -57,6 +57,15 @@ describe('utils', () => {
       Subprocess.mockStderr = '';
       const result = await execute('echo hi');
       expect(result).toBe('result output');
+      expect(Subprocess.lastInstance?.argv).toEqual(['bash', '-c', 'echo hi']);
+    });
+
+    it('executes command array directly without shell wrapper', async () => {
+      Subprocess.mockStdout = 'direct output';
+      Subprocess.mockStderr = '';
+      const result = await execute(['echo', 'hello']);
+      expect(result).toBe('direct output');
+      expect(Subprocess.lastInstance?.argv).toEqual(['echo', 'hello']);
     });
 
     it('resolves empty string when stdout is empty', async () => {

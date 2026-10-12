@@ -25,3 +25,15 @@ export class Bytes {
     return this.data;
   }
 }
+
+export class Variant {
+  public sig: string;
+  public val: any;
+  constructor(sig: string, val: any) {
+    this.sig = sig;
+    this.val = val;
+  }
+  deep_unpack(): any {
+    return this.val;
+  }
+}
