@@ -68,13 +68,15 @@ jobs:
           sleep 3
           run_in_pod wait-user-bus.sh
 
-          echo "Starting GNOME Shell inside container display :99..."
-          run_in_pod systemctl --user start "gnome-xsession@:99"
-          sleep 6
-
+          # GNOME Shell only scans extension directories at startup, so the
+          # extension must be installed before the session is started.
           echo "Installing extension package..."
           podman cp "${ZIP}" "${POD}:/home/gnomeshell/"
           run_in_pod gnome-extensions install --force "${UUID}.zip"
+
+          echo "Starting GNOME Shell inside container display :99..."
+          run_in_pod systemctl --user start "gnome-xsession@:99"
+          sleep 8
 
           echo "Enabling extension..."
           run_in_pod gnome-extensions enable "${UUID}"
@@ -94,7 +96,8 @@ jobs:
             convert xwd:framebuffer.xwd "screenshot-gnome-${{ matrix.gnome-version }}.png" || true
           fi
 
-          if echo "${INFO}" | grep -q "'state': <uint32 1>"; then
+          # The state is returned as a double (<1.0>) on some shell versions and as uint32 on others
+          if echo "${INFO}" | grep -Eq "'state': <(uint32 )?1(\.0)?>"; then
             echo "SUCCESS: Extension is ACTIVE in GNOME ${{ matrix.gnome-version }}!"
           else
             echo "ERROR: Extension failed to activate in GNOME ${{ matrix.gnome-version }}!"
