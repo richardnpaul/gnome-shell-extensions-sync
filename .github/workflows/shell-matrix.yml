@@ -44,7 +44,7 @@ jobs:
       - name: Install host dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libglib2.0-bin zip gettext podman imagemagick
+          sudo apt-get install -y libglib2.0-bin zip gettext podman
 
       - name: Install Node dependencies
         run: npm ci
@@ -90,12 +90,6 @@ jobs:
 
           echo "Extension Info: ${INFO}"
 
-          # Extract framebuffer screenshot
-          podman cp "${POD}:/opt/Xvfb_screen0" ./framebuffer.xwd || true
-          if [ -f ./framebuffer.xwd ]; then
-            convert xwd:framebuffer.xwd "screenshot-gnome-${{ matrix.gnome-version }}.png" || true
-          fi
-
           # The state is returned as a double (<1.0>) on some shell versions and as uint32 on others
           if echo "${INFO}" | grep -Eq "'state': <(uint32 )?1(\.0)?>"; then
             echo "SUCCESS: Extension is ACTIVE in GNOME ${{ matrix.gnome-version }}!"
@@ -108,11 +102,3 @@ jobs:
           fi
 
           podman stop "${POD}"
-
-      - name: Upload Framebuffer Screenshot
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: screenshot-gnome-${{ matrix.gnome-version }}
-          path: screenshot-gnome-${{ matrix.gnome-version }}.png
-          if-no-files-found: ignore
