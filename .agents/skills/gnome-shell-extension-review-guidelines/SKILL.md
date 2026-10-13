@@ -143,4 +143,4 @@ xvfb-run -a gjs -m scripts/test-prefs.js --check --rtl
 Ensure the final zip contains only production assets:
 
 - ✅ Included: `metadata.json`, `extension.js`, `prefs.js`, `schemas/`, `locale/`, `icons/`
-- ❌ Excluded: `node_modules/`, `src/`, `tests/`, `.git/`, `.github/`, `.agents/`, `package.json`, `*.ts`, `*.po`, `*.pot`, build scripts.
+- ❌ Excluded: `node_modules/`, `src/`, `tests/`, `.git/`, `.github/`, `.agents/`, `package.json`, `*.ts`, `*.po`, `*.pot`, build scripts
