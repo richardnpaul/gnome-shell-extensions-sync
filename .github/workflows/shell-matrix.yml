@@ -62,7 +62,8 @@ jobs:
           # must be able to read /etc/shadow (mode 000) for the gnomeshell autologin to
           # succeed. Without it user@1000.service never starts and the user bus never appears.
           POD=$(podman run --rm --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN --cap-add=DAC_READ_SEARCH -td ${{ matrix.image }})
-          # podman exec --user root "${POD}" chmod 0644 /etc/shadow
+          podman exec --user root "${POD}" chmod 0644 /etc/shadow
+          # podman exec --user root "${POD}" echo "gdm-greeter:!*:20224::::::" >> /etc/shadow
 
           run_in_pod() {
             podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh "$@"
@@ -76,17 +77,17 @@ jobs:
           sleep 3
           if ! timeout 60 podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh wait-user-bus.sh; then
             echo "ERROR: user session bus did not become available within 60s"
-            # echo "=== System state ==="
-            # podman exec "${POD}" systemctl is-system-running || true
-            # podman exec "${POD}" systemctl --failed --no-pager || true
-            # echo "=== User manager ==="
-            # podman exec "${POD}" systemctl status user@1000.service --no-pager || true
-            # podman exec "${POD}" loginctl list-sessions --no-pager || true
-            # echo "=== Container capabilities / shadow permissions ==="
-            # podman exec "${POD}" grep -E 'Cap(Eff|Bnd)|NoNewPrivs|Seccomp' /proc/1/status || true
-            # podman exec "${POD}" ls -l /etc/shadow /usr/sbin/unix_chkpwd || true
+            echo "=== System state ==="
+            podman exec "${POD}" systemctl is-system-running || true
+            podman exec "${POD}" systemctl --failed --no-pager || true
+            echo "=== User manager ==="
+            podman exec "${POD}" systemctl status user@1000.service --no-pager || true
+            podman exec "${POD}" loginctl list-sessions --no-pager || true
+            echo "=== Container capabilities / shadow permissions ==="
+            podman exec "${POD}" grep -E 'Cap(Eff|Bnd)|NoNewPrivs|Seccomp' /proc/1/status || true
+            podman exec "${POD}" ls -l /etc/shadow /usr/sbin/unix_chkpwd || true
             echo "=== Login journal ==="
-            podman exec "${POD}" journalctl -b --no-pager -n 60 || true
+            podman exec "${POD}" journalctl -b --no-pager -n 80 || true
             podman stop "${POD}" || true
             exit 1
           fi
