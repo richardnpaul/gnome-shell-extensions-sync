@@ -23,13 +23,13 @@ jobs:
       matrix:
         include:
           - gnome-version: '45'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-39:v19@sha256:c6e1d84b05a674d5e8df9a1c08c7ab7119b773b5765bc06e415172a85728cc2f'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-39:v19@sha256:66cb854935052ff4a09b6d9015ac71366cc19f5742321c8b4d3a6541a8af6834'
           - gnome-version: '46'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-40:v19@sha256:828d60a92162ee07581490be872f253d0c1fea48003d4c62b75c46006d2fd2d6'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-40:v19@sha256:0267225aeb9ae0d87df3364e0a3b02ba6613bda8cd17a187a836d4a270ab820c'
           - gnome-version: '47'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-41:v19@sha256:0e37a2fa4f608ceb7d9ef9c84a81244775fccbf7111c7b31b7fbaddd10e1c14c'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-41:v19@sha256:ca22704775d903e5b6d03a2fbbe83913c0851df5d516b317640752be386433d6'
           - gnome-version: '48'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-rawhide@sha256:6987ec31fb1209a78b43c49d65f3ecd7045604f8e653bde0720344b04036e520'
+            image: 'ghcr.io/schneegans/gnome-shell-pod-rawhide:latest@sha256:76f67893e5ab9f9217de4c6ea31e065099d8ef7d81134e70a7910b8161de08c8'
 
     steps:
       - name: Checkout repository
@@ -62,15 +62,29 @@ jobs:
           # must be able to read /etc/shadow (mode 000) for the gnomeshell autologin to
           # succeed. Without it user@1000.service never starts and the user bus never appears.
           POD=$(podman run --rm --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN --cap-add=DAC_READ_SEARCH -td ${{ matrix.image }})
+          # podman exec --user root "${POD}" chmod 0644 /etc/shadow
 
           run_in_pod() {
             podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh "$@"
           }
 
+          echo "=== Container runtime ==="
+          podman --version
+          podman info --format 'rootless={{.Host.Security.Rootless}} cgroups={{.Host.CgroupsVersion}} manager={{.Host.CgroupManager}} runtime={{.Host.OCIRuntime.Name}} {{.Host.OCIRuntime.Version}} kernel={{.Host.Kernel}}' || true
+
           echo "Waiting for user session bus..."
           sleep 3
           if ! timeout 60 podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh wait-user-bus.sh; then
             echo "ERROR: user session bus did not become available within 60s"
+            # echo "=== System state ==="
+            # podman exec "${POD}" systemctl is-system-running || true
+            # podman exec "${POD}" systemctl --failed --no-pager || true
+            # echo "=== User manager ==="
+            # podman exec "${POD}" systemctl status user@1000.service --no-pager || true
+            # podman exec "${POD}" loginctl list-sessions --no-pager || true
+            # echo "=== Container capabilities / shadow permissions ==="
+            # podman exec "${POD}" grep -E 'Cap(Eff|Bnd)|NoNewPrivs|Seccomp' /proc/1/status || true
+            # podman exec "${POD}" ls -l /etc/shadow /usr/sbin/unix_chkpwd || true
             echo "=== Login journal ==="
             podman exec "${POD}" journalctl -b --no-pager -n 60 || true
             podman stop "${POD}" || true
