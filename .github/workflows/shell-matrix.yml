@@ -58,7 +58,10 @@ jobs:
           ZIP="dist/${UUID}.zip"
 
           echo "Starting container for GNOME ${{ matrix.gnome-version }}..."
-          POD=$(podman run --rm --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN -td ${{ matrix.image }})
+          # DAC_READ_SEARCH is required by the Fedora 40/41 based images: PAM's unix_chkpwd
+          # must be able to read /etc/shadow (mode 000) for the gnomeshell autologin to
+          # succeed. Without it user@1000.service never starts and the user bus never appears.
+          POD=$(podman run --rm --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN --cap-add=DAC_READ_SEARCH -td ${{ matrix.image }})
 
           run_in_pod() {
             podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh "$@"
@@ -66,7 +69,13 @@ jobs:
 
           echo "Waiting for user session bus..."
           sleep 3
-          run_in_pod wait-user-bus.sh
+          if ! timeout 60 podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh wait-user-bus.sh; then
+            echo "ERROR: user session bus did not become available within 60s"
+            echo "=== Login journal ==="
+            podman exec "${POD}" journalctl -b --no-pager -n 60 || true
+            podman stop "${POD}" || true
+            exit 1
+          fi
 
           # GNOME Shell only scans extension directories at startup, so the
           # extension must be installed before the session is started.
