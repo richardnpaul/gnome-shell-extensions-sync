@@ -63,7 +63,6 @@ jobs:
           # succeed. Without it user@1000.service never starts and the user bus never appears.
           POD=$(podman run --rm --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN --cap-add=DAC_READ_SEARCH -td ${{ matrix.image }})
           podman exec --user root "${POD}" chmod 0644 /etc/shadow
-          # podman exec --user root "${POD}" echo "gdm-greeter:!*:20224::::::" >> /etc/shadow
 
           run_in_pod() {
             podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh "$@"
