@@ -1,0 +1,133 @@
+name: Shell Compatibility Matrix
+
+on:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly run on Mondays at 04:00 UTC
+    - cron: '0 4 * * 1'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test-shell-versions:
+    name: GNOME ${{ matrix.gnome-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - gnome-version: '47'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-41:latest'
+          - gnome-version: '48'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-42:latest'
+          - gnome-version: '49'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-43:latest'
+          - gnome-version: '50'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-44:latest'
+          - gnome-version: '51'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-rawhide:latest'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26
+          cache: 'npm'
+
+      - name: Install host dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-bin zip unzip gettext podman
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build extension package
+        run: npm run build:package
+
+      - name: Run E2E Smoke Test in GNOME ${{ matrix.gnome-version }} Container
+        run: |
+          UUID="extensions-sync@richardnpaul.github.com"
+          ZIP="dist/${UUID}.zip"
+
+          echo "Starting container for GNOME ${{ matrix.gnome-version }}..."
+          POD=$(podman run --rm --systemd=always --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN -td ${{ matrix.image }})
+
+          run_in_pod() {
+            podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh "$@"
+          }
+
+          cleanup() {
+            echo "Cleaning up container ${POD}..."
+            podman stop -t 2 "${POD}" 2>/dev/null || podman rm -f "${POD}" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          echo "Waiting for user session bus and Wayland socket..."
+          if ! timeout 60 podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh wait-user-bus.sh; then
+            echo "ERROR: user session bus did not become available within 60s"
+            echo "=== System state ==="
+            podman exec "${POD}" systemctl is-system-running || true
+            podman exec "${POD}" systemctl --failed --no-pager || true
+            echo "=== User manager ==="
+            podman exec "${POD}" systemctl status user@1000.service --no-pager || true
+            echo "=== Journal ==="
+            podman exec "${POD}" journalctl -b --no-pager -n 80 || true
+            exit 1
+          fi
+
+          echo "Waiting for org.gnome.Shell.Extensions interface..."
+          run_in_pod wait-dbus-interface.sh -d org.gnome.Shell -o /org/gnome/Shell -i org.gnome.Shell.Extensions
+
+          echo "Installing extension package..."
+          TMP_DIR=$(mktemp -d)
+          unzip -q "${ZIP}" -d "${TMP_DIR}/${UUID}"
+          podman exec --user gnomeshell "${POD}" mkdir -p /home/gnomeshell/.local/share/gnome-shell/extensions
+          podman cp "${TMP_DIR}/${UUID}" "${POD}:/home/gnomeshell/.local/share/gnome-shell/extensions/"
+          podman exec "${POD}" chown -R gnomeshell:gnomeshell "/home/gnomeshell/.local/share/gnome-shell/extensions/${UUID}"
+          rm -rf "${TMP_DIR}"
+
+          echo "Loading extension into GNOME Shell..."
+          run_in_pod gdbus call --session \
+            --dest org.gnome.Shell \
+            --object-path /org/gnome/Shell \
+            --method org.gnome.Shell.Eval \
+            "(async () => {
+               const Main = await import('resource:///org/gnome/shell/ui/main.js');
+               const { ExtensionType } = await import('resource:///org/gnome/shell/misc/extensionUtils.js');
+               const { default: Gio } = await import('gi://Gio');
+               const uuid = '${UUID}';
+               if (!Main.extensionManager.lookup(uuid)) {
+                 const dir = Gio.File.new_for_path(global.userdatadir).get_child('extensions').get_child(uuid);
+                 const ext = Main.extensionManager.createExtensionObject(uuid, dir, ExtensionType.PER_USER);
+                 await Main.extensionManager.loadExtension(ext);
+               }
+               return true;
+             })()"
+          sleep 1
+
+          echo "Enabling extension via GSettings..."
+          run_in_pod gsettings set org.gnome.shell enabled-extensions "['${UUID}']"
+          sleep 2
+
+          echo "Verifying extension status..."
+          INFO=$(run_in_pod gnome-extensions info "${UUID}")
+          echo "${INFO}"
+
+          if echo "${INFO}" | grep -q "State: ACTIVE"; then
+            echo "SUCCESS: Extension is ACTIVE in GNOME ${{ matrix.gnome-version }}!"
+          else
+            echo "ERROR: Extension failed to activate in GNOME ${{ matrix.gnome-version }}!"
+            echo "=== Journal logs ==="
+            podman exec "${POD}" journalctl -b -o short-precise --no-pager | grep -E "extensions-sync|gnome-shell" | tail -n 80 || true
+            exit 1
+          fi

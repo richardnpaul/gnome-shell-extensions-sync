@@ -30,13 +30,13 @@ export class ExtensionsDataProvider implements DataProvider {
 
     debug(`downloading extensions: ${downloadedExtensions}`);
 
-    await Promise.all(
-      downloadedExtensions.map((extensionId) => {
-        return Object.keys(extensionData[extensionId]).map((schemaPath) => {
-          return writeDconfData(schemaPath, extensionData[extensionId][schemaPath]);
-        });
-      }),
-    );
+    const writePromises: Array<Promise<void>> = [];
+    downloadedExtensions.forEach((extensionId) => {
+      Object.keys(extensionData[extensionId]).forEach((schemaPath) => {
+        writePromises.push(writeDconfData(schemaPath, extensionData[extensionId][schemaPath]));
+      });
+    });
+    await Promise.all(writePromises);
 
     await Promise.all(
       downloadedExtensions.map(

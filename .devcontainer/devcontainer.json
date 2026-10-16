@@ -1,0 +1,45 @@
+{
+  "name": "GNOME Shell Extensions Sync",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "remoteUser": "vscode",
+  "runArgs": [
+    "--cap-add=SYS_NICE",
+    "--cap-add=IPC_LOCK",
+    "-e",
+    "DISPLAY=${localEnv:DISPLAY}",
+    "-e",
+    "WAYLAND_DISPLAY=${localEnv:WAYLAND_DISPLAY}",
+    "-e",
+    "XDG_RUNTIME_DIR=${localEnv:XDG_RUNTIME_DIR}",
+    "-v",
+    "/tmp/.X11-unix:/tmp/.X11-unix:ro"
+  ],
+  "containerEnv": {
+    "GI_TYPELIB_PATH": "/usr/lib/gnome-shell/girepository-1.0",
+    "SHELL": "/bin/bash"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+        "typescript.tsdk": "node_modules/typescript/lib"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "vitest.explorer",
+        "redhat.vscode-yaml",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install && pre-commit install"
+}

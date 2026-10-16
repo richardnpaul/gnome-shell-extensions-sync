@@ -1,0 +1,6 @@
+resources/schemas/org.gnome.shell.extensions.extensions-sync.gschema.xml
+src/extension.ts
+src/panel/statusMenu.ts
+src/prefs/prefs.ts
+src/sync/index.ts
+src/api/index.ts

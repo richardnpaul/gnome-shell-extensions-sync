@@ -1,0 +1,200 @@
+# Hindi translation for Extensions Sync.
+# Copyright (C) 2026 Extensions Sync
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:20+0100\n"
+"Last-Translator: Richard Paul <rnpdevcontact@gmail.com>\n"
+"Language-Team: Hindi <gnome-hi@gnome.org>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "सिंक सेटिंग्स"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "अपलोड करें"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "डाउनलोड करें"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "प्राथमिकताएं"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "प्रदाता"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "सिंक प्रदाता"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "अपनी सेटिंग्स सिंक करने के लिए क्लाउड या स्थानीय सेवा चुनें।"
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30
+msgid "Local"
+msgstr "स्थानीय"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "GitHub सेटिंग्स"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "gist.github.com पर एक गुप्त Gist बनाएं और व्यक्तिगत एक्सेस टोकन उत्पन्न करें।"
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "Gist आईडी"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "GitHub टोकन"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "GitLab सेटिंग्स"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "gitlab.com पर एक निजी स्निपेट बनाएं और एक्सेस टोकन उत्पन्न करें।"
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "स्निपेट आईडी"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "GitLab टोकन"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "स्थानीय बैकअप सेटिंग्स"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "स्थानीय JSON फ़ाइल में अपना कॉन्फ़िगरेशन सहेजें और पुनर्स्थापित करें।"
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "बैकअप फ़ाइल स्थान"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "कोई फ़ाइल चयनित नहीं है"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "ब्राउज़ करें…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "बैकअप फ़ाइल स्थान चुनें"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "सिंक किया गया डेटा"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "सिंक किए गए घटक"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "चुनें कि कौन से घटक अपलोड और डाउनलोड किए जाएंगे।"
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "एक्सटेंशन"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "सभी उपयोगकर्ता एक्सटेंशन और उनके dconf कॉन्फ़िगरेशन सिंक करें"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "कीबाइंडिंग"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "सभी GNOME Shell और GTK विंडो/मीडिया कीबाइंडिंग सिंक करें"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "ट्वीक्स"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "GNOME डेस्कटॉप थीम, फ़ॉन्ट, इंटरफ़ेस और ट्वीक सेटिंग्स सिंक करें"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "सामान्य"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "व्यवहार और इंटरफ़ेस"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "ट्रे आइकन दिखाएं"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "शीर्ष पैनल में सिंक स्थिति आइकन प्रदर्शित करें"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "सूचनाएं दिखाएं"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "सिंक प्रगति और त्रुटियों पर डेस्कटॉप सूचनाएं प्रदर्शित करें"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "वर्तमान सिस्टम पर सिंक डेटा लागू करने में विफल।"
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "एक्सटेंशन अपडेट हो गए हैं। GNOME Shell पुनः लोड हो रहा है"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "एक्सटेंशन अपडेट हो गए हैं। कृपया GNOME Shell पुनः लोड करें"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "सेटिंग्स %s पर सफलतापूर्वक सहेजी गईं"
+
+#: src/api/index.ts:54
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "%s पर सेटिंग्स सहेजते समय त्रुटि हुई। कृपया लॉग जांचें।"
+
+#: src/api/index.ts:67
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "%s से सेटिंग्स पढ़ते समय त्रुटि हुई। कृपया लॉग जांचें।"

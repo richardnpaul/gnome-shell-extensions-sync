@@ -1,6 +1,6 @@
 import { SyncEvent } from '@esync/api/types';
 import { Data, SyncData } from '@esync/data';
-import { canRestartShell, notify, restartShell } from '@esync/shell';
+import { _, canRestartShell, notify, restartShell } from '@esync/shell';
 import { EventEmitter } from 'events';
 import { logger } from '@esync/utils';
 
@@ -13,19 +13,21 @@ const debug = logger('sync');
 export class Sync {
   private eventEmitter: EventEmitter;
   private data: Data;
+  private boundOnReadFinished: (syncData?: SyncData) => Promise<void>;
 
   constructor(eventEmitter: EventEmitter, data: Data) {
     this.data = data;
     this.eventEmitter = eventEmitter;
+    this.boundOnReadFinished = this.onReadFinished.bind(this);
   }
 
   start(): void {
-    this.eventEmitter.on(SyncEvent.READ_FINISHED, this.onReadFinished.bind(this));
+    this.eventEmitter.on(SyncEvent.READ_FINISHED, this.boundOnReadFinished);
     debug('listening for read completion events');
   }
 
   stop(): void {
-    this.eventEmitter.off(SyncEvent.READ_FINISHED, this.onReadFinished.bind(this));
+    this.eventEmitter.off(SyncEvent.READ_FINISHED, this.boundOnReadFinished);
     debug('stopped listening for read completion events');
   }
 

@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Greek (el)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Greek Translators\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Ρυθμίσεις συγχρονισμού"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Ανέβασμα"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Λήψη"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Προτιμήσεις"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Πάροχος"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Πάροχος συγχρονισμού"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Επιλέξτε την υπηρεσία cloud ή τοπική για συγχρονισμό των ρυθμίσεών σας."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Τοπικά"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "Ρυθμίσεις GitHub"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Δημιουργήστε ένα μυστικό Gist στο gist.github.com και δημιουργήστε ένα προσωπικό διακριτικό πρόσβασης."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "Αναγνωριστικό Gist"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "Διακριτικό GitHub"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "Ρυθμίσεις GitLab"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Δημιουργήστε ένα ιδιωτικό snippet στο gitlab.com και δημιουργήστε ένα διακριτικό πρόσβασης."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "Αναγνωριστικό Snippet"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "Διακριτικό GitLab"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Ρυθμίσεις τοπικού αντιγράφου ασφαλείας"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Αποθηκεύστε και επαναφέρετε τις ρυθμίσεις σας από τοπικό αρχείο JSON."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Τοποθεσία αντιγράφου ασφαλείας"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Δεν έχει επιλεγεί αρχείο"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Περιήγηση…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Επιλέξτε τοποθεσία αντιγράφου ασφαλείας"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Συγχρονισμένα δεδομένα"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Συγχρονισμένα στοιχεία"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Επιλέξτε ποια στοιχεία θα μεταφορτώνονται και θα λαμβάνονται."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Επεκτάσεις"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Συγχρονισμός όλων των επεκτάσεων χρήστη και των ρυθμίσεων dconf"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Συντομεύσεις πληκτρολογίου"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Συγχρονισμός όλων των συντομεύσεων GNOME Shell και GTK"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Μικρορυθμίσεις"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Συγχρονισμός θέματος, γραμματοσειράς και ρυθμίσεων GNOME"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Γενικά"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Συμπεριφορά και διεπαφή"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Εμφάνιση εικονιδίου στην περιοχή ειδοποιήσεων"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Εμφάνιση του εικονιδίου κατάστασης συγχρονισμού στον επάνω πίνακα"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Εμφάνιση ειδοποιήσεων"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Εμφάνιση ειδοποιήσεων επιφάνειας εργασίας για πρόοδο και σφάλματα"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Αποτυχία εφαρμογής των δεδομένων συγχρονισμού στο τρέχον σύστημα."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Οι επεκτάσεις ενημερώθηκαν. Γίνεται επαναφόρτωση του GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Οι επεκτάσεις ενημερώθηκαν. Παρακαλούμε επαναφορτώστε το GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Οι ρυθμίσεις αποθηκεύτηκαν επιτυχώς στο %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Παρουσιάστηκε σφάλμα κατά την αποθήκευση των ρυθμίσεων στο %s. Ελέγξτε τα αρχεία καταγραφής."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Παρουσιάστηκε σφάλμα κατά την ανάγνωση των ρυθμίσεων από το %s. Ελέγξτε τα αρχεία καταγραφής."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

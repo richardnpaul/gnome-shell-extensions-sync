@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Hmong (hmn)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Hmong Translators\n"
+"Language: hmn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Chaw Teeb Duab Sync"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Muab tso rau saum"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Rub tawm"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Kev Nyiam"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Tus Muab Kev Pab"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Tus Muab Kev Pab Sync"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Xaiv huab cua lossis kev pabcuam hauv zos los sync koj qhov chaw teeb tsa."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Hauv zos"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "GitHub Chaw Teeb Tsa"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Tsim ib qho zais Gist ntawm gist.github.com thiab tsim cov token nkag mus."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "Gist ID"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "GitHub Token"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "GitLab Chaw Teeb Tsa"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Tsim ib qho snippet ntiag tug ntawm gitlab.com thiab tsim cov token nkag mus."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "Snippet ID"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "GitLab Token"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Chaw Teeb Tsa Thaub Qab Hauv Zos"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Txuag thiab rov kho koj qhov kev teeb tsa rau/los ntawm cov ntaub ntawv JSON hauv zos."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Qhov Chaw Ntaub Ntawv Thaub Qab"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Tsis muaj ntaub ntawv xaiv"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Tshawb nrhiav…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Xaiv Qhov Chaw Ntaub Ntawv Thaub Qab"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Cov Ntaub Ntawv Sync"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Cov Cheeb Tsam Sync"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Xaiv cov khoom twg yuav raug tso saum thiab rub tawm."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Cov Ntxiv"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Sync tag nrho cov neeg siv kev txuas ntxiv thiab dconf kev teeb tsa"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Cov Khawm Luv"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Sync tag nrho GNOME Shell thiab GTK cov khawm luv"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Kev Hloov Kho"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Sync GNOME desktop ntsiab lus, ntawv thiab kev teeb tsa"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Dav Dav"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Kev Coj Cwj Pwm thiab Sib Txuas Lus"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Qhia Tray Icon"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Qhia cov xwm txheej sync icon rau ntawm lub vaj huam sib luag saum toj kawg nkaus"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Qhia Cov Lus Ceeb Toom"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Qhia cov lus ceeb toom ntawm kev nce qib thiab kev ua yuam kev"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Tsis muaj peev xwm siv cov ntaub ntawv sync rau cov kab ke tam sim no."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Cov ntxiv raug hloov kho tshiab. Reloading GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Cov ntxiv raug hloov kho tshiab. Thov rov reload GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Cov chaw tau txais kev cawmdim zoo rau %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Muaj qhov yuam kev thaum txuag chaw rau %s. Thov kos cov ntaub ntawv."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Muaj qhov yuam kev thaum nyeem ntawv los ntawm %s. Thov kos cov ntaub ntawv."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

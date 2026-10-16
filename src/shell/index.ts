@@ -1,7 +1,10 @@
-import { execute, logger } from '@esync/utils';
-import { File, FileCreateFlags, file_new_tmp, Settings } from '@gi-types/gio2';
+import { execute, logger, replaceFileContentsAsync } from '@esync/utils';
+import { File, file_new_tmp, Settings } from '@gi-types/gio2';
 import { PRIORITY_DEFAULT } from '@gi-types/glib2';
-import { is_wayland_compositor, restart } from '@gi-types/meta10';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
+
+export { _ };
 
 const debug = logger('shell');
 
@@ -29,7 +32,7 @@ export interface ShellExtension {
   error: any;
   hasPrefs: boolean;
   hasUpdate: boolean;
-  imports: any;
+  imports?: any;
   metadata: {
     name: string;
     description: string;
@@ -40,30 +43,44 @@ export interface ShellExtension {
   path: string;
   state: ExtensionState;
   stateObj: any;
-  stylesheet: File;
+  stylesheet?: File;
   type: ExtensionType;
   uuid: string;
+  openPreferences?: () => void;
+  getSettings?: (schema?: string) => Settings;
 }
 
-export const getCurrentExtension = (): ShellExtension => imports.misc.extensionUtils.getCurrentExtension();
+let _currentExtension: any = null;
 
-export const getCurrentExtensionSettings = (): Settings => imports.misc.extensionUtils.getSettings();
-
-export const canRestartShell = (): boolean => {
-  return !is_wayland_compositor();
+export const setCurrentExtension = (extension: any): void => {
+  _currentExtension = extension;
 };
 
-export const restartShell = (text: string): void => {
-  if (!is_wayland_compositor()) {
-    restart(text);
+export const getCurrentExtension = (): any => {
+  return _currentExtension;
+};
+
+export const getCurrentExtensionSettings = (): Settings => {
+  if (_currentExtension && typeof _currentExtension.getSettings === 'function') {
+    return _currentExtension.getSettings();
   }
+  return null as any;
+};
+
+export const canRestartShell = (): boolean => {
+  return false;
+};
+
+export const restartShell = (_text?: string): void => {
+  debug(`restartShell called: ${_text}`);
+  // Restarting GNOME Shell is not supported on Wayland and removed in modern GNOME versions
 };
 
 export const notify = (text: string): void => {
   const settings = getCurrentExtensionSettings();
-  const showNotifications = settings.get_boolean('show-notifications');
+  const showNotifications = settings ? settings.get_boolean('show-notifications') : true;
   if (showNotifications) {
-    imports.ui.main.notify(text);
+    Main.notify(text);
   } else {
     debug(`Notifications are hidden. Logging the content instead. Content: ${text}`);
   }
@@ -74,11 +91,11 @@ export const writeDconfData = async (schemaPath: string, data: string): Promise<
     return;
   }
   const [file, ioStream] = file_new_tmp(null);
-  file.replace_contents(imports.byteArray.fromString(data), null, false, FileCreateFlags.REPLACE_DESTINATION, null);
+  await replaceFileContentsAsync(file, new TextEncoder().encode(data));
   try {
     await execute(`dconf load ${schemaPath} < ${file.get_path()}`);
     debug(`loaded settings for ${schemaPath}`);
-  } catch (ex) {
+  } catch {
     debug(`cannot load settings for ${schemaPath}`);
   }
   file.delete(null);
@@ -89,16 +106,16 @@ export const readDconfData = async (schemaPath: string): Promise<string> => {
   return execute(`dconf dump ${schemaPath}`);
 };
 
+export const DBUS_INTERFACE_EXTENSIONS_SYNC = `<node>
+  <interface name="com.github.richardnpaul.ExtensionsSync">
+    <method name="save" />
+    <method name="read" />
+  </interface>
+</node>`;
+
 export const loadInterfaceXML = (iface: string): any => {
-  const uri = `file:///${getCurrentExtension().path}/dbus/${iface}.xml`;
-  const file = File.new_for_uri(uri);
-
-  try {
-    const [, bytes] = file.load_contents(null);
-    return imports.byteArray.toString(bytes);
-  } catch (e) {
-    log(`Failed to load D-Bus interface ${iface}`);
+  if (iface === 'com.github.richardnpaul.ExtensionsSync') {
+    return DBUS_INTERFACE_EXTENSIONS_SYNC;
   }
-
   return null;
 };

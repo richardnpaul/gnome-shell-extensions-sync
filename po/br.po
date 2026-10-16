@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Breton (br)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Breton Translators\n"
+"Language: br\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Arventennoù gobarzhañ"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Kargañ"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Pellgargañ"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Gwellvezioù"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Pourchaser"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Pourchaser gobarzhañ"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Diuzit ar servij koumoul pe lec'hel evit gobarzhañ hoc'h arventennoù."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Lec'hel"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "Arventennoù GitHub"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Krouit ur Gist kuzh war gist.github.com ha ganit un doare moned personel."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "ID Gist"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "Jedouer GitHub"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "Arventennoù GitLab"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Krouit un tammmig prevez war gitlab.com ha ganit un doare moned."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "ID an tamm"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "Jedouer GitLab"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Arventennoù saveteiñ lec'hel"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Enrollit hag adsevelit ho kefluniadur adalek ur restr JSON lec'hel."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Lec'hiadur ar restr saveteiñ"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Restr ebet diuzet"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Furchal…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Diuzit lec'hiadur ar restr saveteiñ"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Roadoù gobarzhet"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Parzhioù gobarzhet"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Dibabit pe barzhioù a vo karget ha pellgarget."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Astennoù"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Gobarzhañ holl astennoù an implijer hag o c'hefluniadur dconf"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Berradurioù klavier"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Gobarzhañ holl verradurioù GNOME Shell ha GTK"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Kemmoùigoù"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Gobarzhañ tem, nodrezh, etrefas ha kemmoùigoù GNOME"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Hollek"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Emzalc'h hag etrefas"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Diskouez an arlun el laouerig"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Diskouez arlun stad ar gobarzhañ er panell grec'h"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Diskouez kemennoù"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Diskouez kemennoù ar burev diwar-benn an araokadur hag ar fazioù"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "C'hwitet eo bet arloañ ar roadoù gobarzhañ d'ar reizhiad a-vremañ."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Hizivaet eo an astennoù. Oc'h adkargañ GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Hizivaet eo an astennoù. Adkargit GNOME Shell mar plij"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Enrollet eo bet an arventennoù e %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Ur fazi zo c'hoarvezet en ur enrollañ an arventennoù e %s. Gwiriit an deizlevrioù mar plij."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Ur fazi zo c'hoarvezet en ur lenn an arventennoù adalek %s. Gwiriit an deizlevrioù mar plij."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

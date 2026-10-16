@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Malay (ms)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Malay Translators\n"
+"Language: ms\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Tetapan Penyegerakan"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Muat naik"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Muat turun"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Keutamaan"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Penyedia"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Penyedia Penyegerakan"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Pilih perkhidmatan awan atau tempatan untuk menyegerakkan tetapan anda."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Tempatan"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "Tetapan GitHub"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Cipta Gist rahsia di gist.github.com dan jana token akses peribadi."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "ID Gist"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "Token GitHub"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "Tetapan GitLab"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Cipta snippet peribadi di gitlab.com dan jana token akses."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "ID Snippet"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "Token GitLab"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Tetapan Sandaran Tempatan"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Simpan dan pulihkan konfigurasi anda ke/dari fail JSON tempatan."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Lokasi Fail Sandaran"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Tiada fail dipilih"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Semak imbas…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Pilih Lokasi Fail Sandaran"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Data Disegerakkan"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Komponen yang Disegerakkan"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Pilih komponen yang akan dimuat naik dan dimuat turun."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Sambungan"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Segerakkan semua sambungan pengguna dan konfigurasi dconf mereka"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Pintasan Papan Kekunci"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Segerakkan semua pintasan papan kekunci GNOME Shell dan GTK"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Ubah suai"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Segerakkan tema, fon dan tetapan antara muka GNOME"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Umum"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Tingkah laku dan Antara Muka"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Tunjukkan Ikon Dulang"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Pamerkan ikon status penyegerakan di panel atas"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Tunjukkan Pemberitahuan"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Pamerkan pemberitahuan desktop semasa kemajuan dan ralat"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Gagal menggunakan data penyegerakan pada sistem semasa."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Sambungan dikemas kini. Memuatkan semula GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Sambungan dikemas kini. Sila muat semula GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Tetapan berjaya disimpan ke %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Ralat berlaku semasa menyimpan tetapan ke %s. Sila semak log."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Ralat berlaku semasa membaca tetapan dari %s. Sila semak log."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

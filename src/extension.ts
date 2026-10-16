@@ -1,59 +1,93 @@
 import { Api } from '@esync/api';
 import { Data } from '@esync/data';
 import { StatusMenu } from '@esync/panel/statusMenu';
-import { loadInterfaceXML } from '@esync/shell';
+import { loadInterfaceXML, setCurrentExtension } from '@esync/shell';
 import { Sync } from '@esync/sync';
 import { logger } from '@esync/utils';
 import { DBus, DBusExportedObject } from '@gi-types/gio2';
 import { EventEmitter } from 'events';
 import { SyncEvent } from '@esync/api/types';
-import './styles/stylesheet.css';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { CredentialStorePort } from '@esync/core/ports';
+import { SecretCredentialStore } from '@esync/platform/credentials/secretCredentialStore';
+import { CredentialMigrator } from '@esync/platform/credentials/credentialMigration';
 
 const debug = logger('extension');
 
-class SyncExtension {
-  private sync: Sync;
-  private statusMenu: StatusMenu;
-  private api: Api;
-  private eventEmitter: EventEmitter;
-  private data: Data;
-  private dbus: DBusExportedObject;
+export default class SyncExtension extends Extension {
+  private sync?: Sync;
+  private statusMenu?: StatusMenu;
+  private api?: Api;
+  private eventEmitter?: EventEmitter;
+  private data?: Data;
+  private dbus?: DBusExportedObject;
+  private credentialStore?: CredentialStorePort;
 
-  constructor() {
-    this.eventEmitter = new EventEmitter();
-    this.data = new Data();
-    this.api = new Api(this.eventEmitter, this.data);
-    this.sync = new Sync(this.eventEmitter, this.data);
-    this.statusMenu = new StatusMenu(this.eventEmitter);
-    const iface = loadInterfaceXML('io.elhan.ExtensionsSync');
-    this.dbus = DBusExportedObject.wrapJSObject(iface, this);
-
+  constructor(metadata: any) {
+    super(metadata);
+    this.initTranslations();
+    setCurrentExtension(this);
     debug('extension is initialized');
   }
 
   save(): void {
-    this.eventEmitter.emit(SyncEvent.SAVE);
+    if (this.eventEmitter) {
+      this.eventEmitter.emit(SyncEvent.SAVE);
+    }
   }
 
   read(): void {
-    this.eventEmitter.emit(SyncEvent.READ);
+    if (this.eventEmitter) {
+      this.eventEmitter.emit(SyncEvent.READ);
+    }
   }
 
-  enable(): void {
+  enable(credentialStore?: CredentialStorePort): void {
+    setCurrentExtension(this);
+    this.credentialStore = credentialStore || new SecretCredentialStore();
+    const migrator = new CredentialMigrator(this.getSettings(), this.credentialStore);
+    migrator.migrate().catch((error) => debug(`credential migration error: ${error}`));
+
+    this.eventEmitter = new EventEmitter();
+    this.data = new Data();
+    this.api = new Api(this.eventEmitter, this.data, undefined, this.credentialStore);
+    this.sync = new Sync(this.eventEmitter, this.data);
+    this.statusMenu = new StatusMenu(this.eventEmitter);
+
+    const iface = loadInterfaceXML('com.github.richardnpaul.ExtensionsSync');
+    if (iface) {
+      this.dbus = DBusExportedObject.wrapJSObject(iface, this);
+      this.dbus.export(DBus.session, '/com/github/richardnpaul/ExtensionsSync');
+    }
+
     this.sync.start();
     this.statusMenu.show();
-    this.dbus.export(DBus.session, '/io/elhan/ExtensionsSync');
     debug('extension is enabled');
   }
 
   disable(): void {
-    this.sync.stop();
-    this.statusMenu.hide();
-    this.dbus.unexport();
+    if (this.sync) {
+      this.sync.stop();
+      this.sync = undefined;
+    }
+    if (this.statusMenu) {
+      this.statusMenu.destroy();
+      this.statusMenu = undefined;
+    }
+    if (this.dbus) {
+      this.dbus.unexport();
+      this.dbus = undefined;
+    }
+    if (this.api) {
+      this.api.destroy();
+      this.api = undefined;
+    }
+    if (this.data) {
+      this.data.destroy();
+      this.data = undefined;
+    }
+    this.credentialStore = undefined;
+    this.eventEmitter = undefined;
     debug('extension is disabled');
   }
-}
-
-export default function (): SyncExtension {
-  return new SyncExtension();
 }

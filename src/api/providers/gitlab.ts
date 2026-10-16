@@ -1,60 +1,74 @@
+import { CredentialStorePort, HttpTransportPort } from '@esync/core/ports';
 import { SyncData } from '@esync/data';
-import { Bytes, PRIORITY_DEFAULT } from '@gi-types/glib2';
-import { Message, Session, Status, status_get_phrase } from '@gi-types/soup3';
+import { Soup3Transport } from '@esync/platform/http/soup3Transport';
+import { _ } from '@esync/shell';
+import { format } from '@esync/utils';
 import { SyncOperationStatus, SyncProvider } from '../types';
 
 export class Gitlab implements SyncProvider {
   private static SNIPPETS_API_URL = 'https://gitlab.com/api/v4/snippets';
+  public readonly providerId: string = 'gitlab';
 
-  private snippetId: string;
-  private userToken: string;
-  private session: Session;
+  private credentialStore: CredentialStorePort;
+  private http: HttpTransportPort;
 
-  constructor(snippetId: string, userToken: string) {
-    this.snippetId = snippetId;
-    this.userToken = userToken;
-    this.session = new Session();
+  constructor(credentialStore: CredentialStorePort, http?: HttpTransportPort) {
+    this.credentialStore = credentialStore;
+    this.http = http || new Soup3Transport();
   }
 
   async save(syncData: SyncData): Promise<SyncOperationStatus> {
-    const message = Message.new('PUT', `${Gitlab.SNIPPETS_API_URL}/${this.snippetId}`);
-    message.request_headers.append('User-Agent', 'Mozilla/5.0');
-    message.request_headers.append('PRIVATE-TOKEN', `${this.userToken}`);
+    const { token, remoteId } = await this.credentialStore.getProviderCredentials(this.providerId);
+    if (!token || !remoteId) {
+      throw new Error(format(_('failed to save data to %s. Missing credentials'), this.getName()));
+    }
+
     const requestBody = JSON.stringify({
       title: 'Extensions Sync',
       content: JSON.stringify(syncData),
     });
-    message.set_request_body_from_bytes('application/json', new Bytes(imports.byteArray.fromString(requestBody)));
-    await this.session.send_and_read_async(message, PRIORITY_DEFAULT, null);
 
-    const { statusCode } = message;
-    const phrase = status_get_phrase(statusCode);
-    if (statusCode !== Status.OK) {
-      throw new Error(`failed to save data to ${this.getName()}. Server status: ${phrase}`);
+    const response = await this.http.request({
+      method: 'PUT',
+      url: `${Gitlab.SNIPPETS_API_URL}/${remoteId}`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0',
+        'PRIVATE-TOKEN': `${token}`,
+      },
+      body: requestBody,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(format(_('failed to save data to %s. Server status: %s'), this.getName(), response.statusText));
     }
 
     return SyncOperationStatus.SUCCESS;
   }
 
   async read(): Promise<SyncData> {
-    const message = Message.new('GET', `${Gitlab.SNIPPETS_API_URL}/${this.snippetId}/raw`);
-    message.request_headers.append('User-Agent', 'Mozilla/5.0');
-    message.request_headers.append('PRIVATE-TOKEN', `${this.userToken}`);
-
-    const bytes = await this.session.send_and_read_async(message, PRIORITY_DEFAULT, null);
-    const { statusCode } = message;
-    const phrase = status_get_phrase(statusCode);
-    if (statusCode !== Status.OK) {
-      throw new Error(`failed to read data from ${this.getName()}. Server status: ${phrase}`);
+    const { token, remoteId } = await this.credentialStore.getProviderCredentials(this.providerId);
+    if (!token || !remoteId) {
+      throw new Error(format(_('failed to read data from %s. Missing credentials'), this.getName()));
     }
 
-    const data = bytes.get_data();
-    if (data === null) {
-      throw new Error(`failed to read data from ${this.getName()}. Empty response`);
+    const response = await this.http.request({
+      method: 'GET',
+      url: `${Gitlab.SNIPPETS_API_URL}/${remoteId}/raw`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0',
+        'PRIVATE-TOKEN': `${token}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error(format(_('failed to read data from %s. Server status: %s'), this.getName(), response.statusText));
     }
 
-    const json = imports.byteArray.toString(data);
-    const syncData = JSON.parse(json);
+    if (!response.body) {
+      throw new Error(format(_('failed to read data from %s. Empty response'), this.getName()));
+    }
+
+    const syncData = JSON.parse(response.body);
 
     return syncData;
   }

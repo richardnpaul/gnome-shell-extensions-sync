@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Slovak (sk)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Slovak Translators\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Nastavenia synchronizácie"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Nahrať"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "Prevziať"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Predvoľby"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Poskytovateľ"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Poskytovateľ synchronizácie"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Vyberte cloudovú alebo lokálnu službu na synchronizáciu nastavení."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Lokálne"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "Nastavenia GitHub"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Vytvorte tajný Gist na gist.github.com a vygenerujte osobný prístupový token."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "ID Gistu"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "Token GitHub"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "Nastavenia GitLab"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Vytvorte súkromný snippet na gitlab.com a vygenerujte prístupový token."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "ID snippetu"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "Token GitLab"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Nastavenia lokálnej zálohy"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Ukladajte a obnovujte konfiguráciu z lokálneho súboru JSON."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Umiestnenie záložného súboru"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Nie je vybratý žiadny súbor"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Prehľadávať…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Vyberte umiestnenie záložného súboru"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Synchronizované údaje"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Synchronizované súčasti"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Vyberte súčasti, ktoré sa budú nahrávať a preberať."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Rozšírenia"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Synchronizovať všetky používateľské rozšírenia a ich konfigurácie dconf"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Klávesové skratky"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Synchronizovať všetky skratky GNOME Shell a okien/médií GTK"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Vyladenia"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Synchronizovať tému pracovnej plochy, písmo, rozhranie a vyladenia GNOME"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Všeobecné"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Správanie a rozhranie"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Zobraziť ikonu v oblasti oznámení"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Zobraziť ikonu stavu synchronizácie na hornom paneli"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Zobrazovať oznámenia"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Zobrazovať oznámenia o priebehu a chybách"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Nepodarilo sa použiť synchronizačné údaje na aktuálny systém."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Rozšírenia sú aktualizované. Znova sa načítava GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Rozšírenia sú aktualizované. Znova načítajte GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Nastavenia boli úspešne uložené do %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Pri ukladaní nastavení do %s sa vyskytla chyba. Skontrolujte záznamy."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Pri čítaní nastavení z %s sa vyskytla chyba. Skontrolujte záznamy."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"

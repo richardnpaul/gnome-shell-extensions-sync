@@ -1,0 +1,251 @@
+# Translation of Extensions Sync into Samoan (sm)
+# Copyright (C) 2026 Richard Paul
+# This file is distributed under the same license as the Extensions Sync package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Extensions Sync 1\n"
+"Report-Msgid-Bugs-To: https://github.com/richardnpaul/gnome-shell-extensions-sync/issues\n"
+"POT-Creation-Date: 2026-10-12 12:20+0100\n"
+"PO-Revision-Date: 2026-10-12 12:40+0100\n"
+"Last-Translator: Extensions Sync Translators <translators@extensions-sync.org>\n"
+"Language-Team: Samoan Translators\n"
+"Language: sm\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/panel/statusMenu.ts:86
+msgid "Sync Settings"
+msgstr "Fa'atulagaga o le Feso'ota'iga"
+
+#: src/panel/statusMenu.ts:92
+msgid "Upload"
+msgstr "Fa'apipi'i i luga"
+
+#: src/panel/statusMenu.ts:95
+msgid "Download"
+msgstr "La'u mai lalo"
+
+#: src/panel/statusMenu.ts:99
+msgid "Preferences"
+msgstr "Mea e Mana'omia"
+
+#: src/prefs/prefs.ts:16 src/prefs/prefs.ts:26
+msgid "Provider"
+msgstr "Pule o le Auaunaga"
+
+#: src/prefs/prefs.ts:21
+msgid "Sync Provider"
+msgstr "Pule o le Feso'ota'iga"
+
+#: src/prefs/prefs.ts:22
+msgid "Select the cloud or local service to sync your settings with."
+msgstr "Filifili le ao po'o le tautua fa'alotoifale e feso'ota'i ai au fa'atulagaga."
+
+#: src/prefs/prefs.ts:30
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/prefs/prefs.ts:30
+msgid "GitLab"
+msgstr "GitLab"
+
+#: src/prefs/prefs.ts:30 src/api/providers/local.ts:53
+msgid "Local"
+msgstr "Lotoifale"
+
+#: src/prefs/prefs.ts:42
+msgid "GitHub Settings"
+msgstr "Fa'atulagaga a le GitHub"
+
+#: src/prefs/prefs.ts:43
+msgid "Create a secret Gist on gist.github.com and generate a personal access token."
+msgstr "Fausia se Gist fa'alilolilo i le gist.github.com ma fai se fa'ailoga avanoa totino."
+
+#: src/prefs/prefs.ts:46
+msgid "Gist ID"
+msgstr "Fa'amatalaga Gist"
+
+#: src/prefs/prefs.ts:55
+msgid "GitHub Token"
+msgstr "Fa'ailoga a le GitHub"
+
+#: src/prefs/prefs.ts:66
+msgid "GitLab Settings"
+msgstr "Fa'atulagaga a le GitLab"
+
+#: src/prefs/prefs.ts:67
+msgid "Create a private snippet on gitlab.com and generate an access token."
+msgstr "Fausia se snippet tumaoti i le gitlab.com ma fai se fa'ailoga avanoa."
+
+#: src/prefs/prefs.ts:70
+msgid "Snippet ID"
+msgstr "Fa'amatalaga Snippet"
+
+#: src/prefs/prefs.ts:79
+msgid "GitLab Token"
+msgstr "Fa'ailoga a le GitLab"
+
+#: src/prefs/prefs.ts:90
+msgid "Local Backup Settings"
+msgstr "Fa'atulagaga o Kopi Fa'alotoifale"
+
+#: src/prefs/prefs.ts:91
+msgid "Save and restore your configuration to/from a local JSON file."
+msgstr "Sefe ma toe fa'afo'i mai au fa'atulagaga i/mai se faila JSON fa'alotoifale."
+
+#: src/prefs/prefs.ts:96
+msgid "Backup File Location"
+msgstr "Nofoaga o le Faila Kopi"
+
+#: src/prefs/prefs.ts:97
+msgid "No file selected"
+msgstr "Leai se faila ua filifilia"
+
+#: src/prefs/prefs.ts:101
+msgid "Browse…"
+msgstr "Su'esu'e…"
+
+#: src/prefs/prefs.ts:107
+msgid "Select Backup File Location"
+msgstr "Filifili le Nofoaga o le Faila Kopi"
+
+#: src/prefs/prefs.ts:111
+msgid "JSON files (*.json)"
+msgstr "JSON files (*.json)"
+
+#: src/prefs/prefs.ts:157
+msgid "Synced Data"
+msgstr "Fa'amatalaga ua Feso'ota'i"
+
+#: src/prefs/prefs.ts:162
+msgid "Synchronized Components"
+msgstr "Vaega ua Feso'ota'i"
+
+#: src/prefs/prefs.ts:163
+msgid "Choose which components will be uploaded and downloaded."
+msgstr "Filifili po'o fea vaega e lafo i luga ma la'u mai lalo."
+
+#: src/prefs/prefs.ts:169
+msgid "Extensions"
+msgstr "Fa'aopoopoga"
+
+#: src/prefs/prefs.ts:170
+msgid "Sync all user extensions and their dconf configurations"
+msgstr "Feso'ota'i fa'aopoopoga uma a le tagata fa'aoga ma a latou dconf fa'atulagaga"
+
+#: src/prefs/prefs.ts:174
+msgid "Keybindings"
+msgstr "Auala 'Ato o le Kesi"
+
+#: src/prefs/prefs.ts:175
+msgid "Sync all GNOME Shell and GTK window/media keybindings"
+msgstr "Feso'ota'i auala 'ato uma o le GNOME Shell ma le GTK"
+
+#: src/prefs/prefs.ts:179
+msgid "Tweaks"
+msgstr "Fetu'una'iga"
+
+#: src/prefs/prefs.ts:180
+msgid "Sync GNOME desktop theme, font, interface and tweak settings"
+msgstr "Feso'ota'i le autu, mata'itusi, ma fa'atulagaga a le GNOME"
+
+#: src/prefs/prefs.ts:212
+msgid "General"
+msgstr "Lautele"
+
+#: src/prefs/prefs.ts:217
+msgid "Behavior and Interface"
+msgstr "Amioga ma Fa'aaliga"
+
+#: src/prefs/prefs.ts:221
+msgid "Show Tray Icon"
+msgstr "Faaali le Fa'ailoga i le Fata"
+
+#: src/prefs/prefs.ts:222
+msgid "Display the sync status icon in the top panel"
+msgstr "Fa'aali le fa'ailoga tulaga o feso'ota'iga i le laulau pito i luga"
+
+#: src/prefs/prefs.ts:228
+msgid "Show Notifications"
+msgstr "Fa'aali Fa'asilasilaga"
+
+#: src/prefs/prefs.ts:229
+msgid "Display desktop notifications on sync progress and errors"
+msgstr "Fa'aali fa'asilasilaga i luga o le laulau mo aga'iga'i i luma ma mea sese"
+
+#: src/sync/index.ts:42
+msgid "Failed to apply sync data to current system."
+msgstr "Le mafai ona fa'aoga fa'amatalaga feso'ota'i i le faiga o lo'o i ai nei."
+
+#: src/sync/index.ts:47
+msgid "Extensions are updated. Reloading Gnome Shell"
+msgstr "Ua toe fa'afouina fa'aopoopoga. Toe utaina GNOME Shell"
+
+#: src/sync/index.ts:49
+msgid "Extensions are updated. Please reload Gnome Shell"
+msgstr "Ua toe fa'afouina fa'aopoopoga. Fa'amolemole toe uta le GNOME Shell"
+
+#: src/api/index.ts:47
+msgid "Could not save"
+msgstr "Could not save"
+
+#: src/api/index.ts:51
+#, javascript-format
+msgid "Settings successfully saved to %s"
+msgstr "Ua fa'amanuiaina le sefeina o fa'atulagaga i le %s"
+
+#: src/api/index.ts:55
+#, javascript-format
+msgid "Error occured while saving settings to %s. Please check the logs."
+msgstr "Na tupu se mea sese a'o sefe fa'atulagaga i le %s. Fa'amolemole siaki fa'amaumauga."
+
+#: src/api/index.ts:70
+#, javascript-format
+msgid "Error occured while reading settings from %s. Please check the logs."
+msgstr "Na tupu se mea sese a'o faitau fa'atulagaga mai le %s. Fa'amolemole siaki fa'amaumauga."
+
+#: src/api/providers/github.ts:50 src/api/providers/gitlab.ts:39
+#, javascript-format
+msgid "failed to save data to %s. Server status: %s"
+msgstr "failed to save data to %s. Server status: %s"
+
+#: src/api/providers/github.ts:69 src/api/providers/gitlab.ts:58
+#, javascript-format
+msgid "failed to read data from %s. Server status: %s"
+msgstr "failed to read data from %s. Server status: %s"
+
+#: src/api/providers/github.ts:74 src/api/providers/gitlab.ts:63
+#, javascript-format
+msgid "failed to read data from %s. Empty response"
+msgstr "failed to read data from %s. Empty response"
+
+#: src/api/providers/local.ts:16
+msgid "Please select a backup file location from preferences"
+msgstr "Please select a backup file location from preferences"
+
+#: src/api/providers/local.ts:20
+#, javascript-format
+msgid "Failed to backup settings. %s does not exist"
+msgstr "Failed to backup settings. %s does not exist"
+
+#: src/api/providers/local.ts:31
+#, javascript-format
+msgid "Failed to read settings from backup. %s does not exist"
+msgstr "Failed to read settings from backup. %s does not exist"
+
+#: src/api/providers/local.ts:38
+#, javascript-format
+msgid "Failed to read settings from backup. %s could not be read"
+msgstr "Failed to read settings from backup. %s could not be read"
+
+#: src/api/providers/local.ts:42
+#, javascript-format
+msgid "Failed to read settings from backup. %s is corrupted"
+msgstr "Failed to read settings from backup. %s is corrupted"
+
+#: src/api/providers/local.ts:48
+#, javascript-format
+msgid "%s is not a json file"
+msgstr "%s is not a json file"
