@@ -36,8 +36,8 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.7.1",
-    "@commitlint/config-conventional": "^19.7.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@gi-types/gdk4": "^4.0.1",
     "@gi-types/gdkpixbuf2": "^2.0.2",
     "@gi-types/gio2": "^2.72.1",
@@ -48,31 +48,33 @@
     "@gi-types/shell0": "^0.1.1",
     "@gi-types/soup3": "^3.0.1",
     "@gi-types/st1": "^1.0.1",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-node-resolve": "^16.0.0",
-    "@rollup/plugin-typescript": "^12.1.2",
+    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
     "@stryker-mutator/core": "^10.0.0",
     "@stryker-mutator/vitest-runner": "^10.0.0",
     "@types/events": "^3.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
-    "@typescript-eslint/parser": "^8.24.0",
-    "@vitest/coverage-v8": "3.2.7",
+    "@typescript-eslint/eslint-plugin": "^8.71.2",
+    "@typescript-eslint/parser": "^8.71.2",
+    "@vitest/coverage-v8": "^4.1.12",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.7",
     "husky": "^9.1.7",
-    "prettier": "^3.4.2",
-    "rollup": "^4.34.0",
+    "prettier": "^3.9.10",
+    "rollup": "^4.64.7",
     "rollup-plugin-cleanup": "^3.2.1",
-    "rollup-plugin-copy": "^3.5.0",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.3",
+    "typescript": "^5.9.3",
     "vite": "^7.3.7",
-    "vitest": "3.2.7"
+    "vitest": "^4.1.12"
   },
   "dependencies": {
     "events": "^3.3.0",
     "fast-xml-parser": "^5.11.2"
+  },
+  "overrides": {
+    "qs": "^6.16.1"
   }
 }

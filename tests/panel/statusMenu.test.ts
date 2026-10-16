@@ -34,7 +34,7 @@ describe('panel/statusMenu', () => {
     it('creates button, attaches event listeners, and adds to panel when show is called', () => {
       const logSpy = vi.spyOn(globalThis as any, 'log');
       const menu = new StatusMenu(eventEmitter);
-      const getSettingsSpy = vi.spyOn(shell, 'getCurrentExtensionSettings');
+      const getSettingsSpy = vi.spyOn(shell, 'getCurrentExtensionSettings').mockClear();
       menu.show();
 
       expect(getSettingsSpy).not.toHaveBeenCalled();

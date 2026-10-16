@@ -1,7 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import copy from 'rollup-plugin-copy';
+import fs from 'node:fs';
 import cleanup from 'rollup-plugin-cleanup';
 
 const buildPath = 'dist';
@@ -120,6 +120,23 @@ function giPlugin() {
   };
 }
 
+function copyResourcesPlugin() {
+  return {
+    name: 'copy-resources',
+    writeBundle() {
+      const targets = [
+        ['resources/icons', `${buildPath}/icons`],
+        ['resources/metadata.json', `${buildPath}/metadata.json`],
+        ['resources/schemas', `${buildPath}/schemas`],
+        ['resources/dbus', `${buildPath}/dbus`],
+      ];
+      for (const [src, dest] of targets) {
+        fs.cpSync(src, dest, { recursive: true, force: true });
+      }
+    },
+  };
+}
+
 const isExternal = (id) => id.startsWith('gi://') || id.startsWith('resource://');
 
 export default [
@@ -144,14 +161,7 @@ export default [
         tsconfig: './tsconfig.json',
         outDir: 'dist',
       }),
-      copy({
-        targets: [
-          { src: './resources/icons', dest: `${buildPath}` },
-          { src: './resources/metadata.json', dest: `${buildPath}` },
-          { src: './resources/schemas', dest: `${buildPath}` },
-          { src: './resources/dbus', dest: `${buildPath}` },
-        ],
-      }),
+      copyResourcesPlugin(),
       cleanup({
         comments: 'none',
       }),

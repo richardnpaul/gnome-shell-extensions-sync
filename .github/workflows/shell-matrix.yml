@@ -22,14 +22,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - gnome-version: '45'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-39:v19@sha256:66cb854935052ff4a09b6d9015ac71366cc19f5742321c8b4d3a6541a8af6834'
-          - gnome-version: '46'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-40:v19@sha256:0267225aeb9ae0d87df3364e0a3b02ba6613bda8cd17a187a836d4a270ab820c'
           - gnome-version: '47'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-41:v19@sha256:ca22704775d903e5b6d03a2fbbe83913c0851df5d516b317640752be386433d6'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-41:latest'
           - gnome-version: '48'
-            image: 'ghcr.io/schneegans/gnome-shell-pod-rawhide:latest@sha256:76f67893e5ab9f9217de4c6ea31e065099d8ef7d81134e70a7910b8161de08c8'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-42:latest'
+          - gnome-version: '49'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-43:latest'
+          - gnome-version: '50'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-44:latest'
+          - gnome-version: '51'
+            image: 'ghcr.io/richardnpaul/gnome-shell-pod-rawhide:latest'
 
     steps:
       - name: Checkout repository
@@ -38,13 +40,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 26
           cache: 'npm'
 
       - name: Install host dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libglib2.0-bin zip gettext podman
+          sudo apt-get install -y libglib2.0-bin zip unzip gettext podman
 
       - name: Install Node dependencies
         run: npm ci
@@ -58,22 +60,19 @@ jobs:
           ZIP="dist/${UUID}.zip"
 
           echo "Starting container for GNOME ${{ matrix.gnome-version }}..."
-          # DAC_READ_SEARCH is required by the Fedora 40/41 based images: PAM's unix_chkpwd
-          # must be able to read /etc/shadow (mode 000) for the gnomeshell autologin to
-          # succeed. Without it user@1000.service never starts and the user bus never appears.
-          POD=$(podman run --rm --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN --cap-add=DAC_READ_SEARCH -td ${{ matrix.image }})
-          podman exec --user root "${POD}" chmod 0644 /etc/shadow
+          POD=$(podman run --rm --systemd=always --cap-add=SYS_NICE --cap-add=IPC_LOCK --cap-add=CAP_SYS_ADMIN -td ${{ matrix.image }})
 
           run_in_pod() {
             podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh "$@"
           }
 
-          echo "=== Container runtime ==="
-          podman --version
-          podman info --format 'rootless={{.Host.Security.Rootless}} cgroups={{.Host.CgroupsVersion}} manager={{.Host.CgroupManager}} runtime={{.Host.OCIRuntime.Name}} {{.Host.OCIRuntime.Version}} kernel={{.Host.Kernel}}' || true
+          cleanup() {
+            echo "Cleaning up container ${POD}..."
+            podman stop -t 2 "${POD}" 2>/dev/null || podman rm -f "${POD}" 2>/dev/null || true
+          }
+          trap cleanup EXIT
 
-          echo "Waiting for user session bus..."
-          sleep 3
+          echo "Waiting for user session bus and Wayland socket..."
           if ! timeout 60 podman exec --user gnomeshell --workdir /home/gnomeshell "${POD}" set-env.sh wait-user-bus.sh; then
             echo "ERROR: user session bus did not become available within 60s"
             echo "=== System state ==="
@@ -81,47 +80,54 @@ jobs:
             podman exec "${POD}" systemctl --failed --no-pager || true
             echo "=== User manager ==="
             podman exec "${POD}" systemctl status user@1000.service --no-pager || true
-            podman exec "${POD}" loginctl list-sessions --no-pager || true
-            echo "=== Container capabilities / shadow permissions ==="
-            podman exec "${POD}" grep -E 'Cap(Eff|Bnd)|NoNewPrivs|Seccomp' /proc/1/status || true
-            podman exec "${POD}" ls -l /etc/shadow /usr/sbin/unix_chkpwd || true
-            echo "=== Login journal ==="
+            echo "=== Journal ==="
             podman exec "${POD}" journalctl -b --no-pager -n 80 || true
-            podman stop "${POD}" || true
             exit 1
           fi
 
-          # GNOME Shell only scans extension directories at startup, so the
-          # extension must be installed before the session is started.
+          echo "Waiting for org.gnome.Shell.Extensions interface..."
+          run_in_pod wait-dbus-interface.sh -d org.gnome.Shell -o /org/gnome/Shell -i org.gnome.Shell.Extensions
+
           echo "Installing extension package..."
-          podman cp "${ZIP}" "${POD}:/home/gnomeshell/"
-          run_in_pod gnome-extensions install --force "${UUID}.zip"
+          TMP_DIR=$(mktemp -d)
+          unzip -q "${ZIP}" -d "${TMP_DIR}/${UUID}"
+          podman exec --user gnomeshell "${POD}" mkdir -p /home/gnomeshell/.local/share/gnome-shell/extensions
+          podman cp "${TMP_DIR}/${UUID}" "${POD}:/home/gnomeshell/.local/share/gnome-shell/extensions/"
+          podman exec "${POD}" chown -R gnomeshell:gnomeshell "/home/gnomeshell/.local/share/gnome-shell/extensions/${UUID}"
+          rm -rf "${TMP_DIR}"
 
-          echo "Starting GNOME Shell inside container display :99..."
-          run_in_pod systemctl --user start "gnome-xsession@:99"
-          sleep 8
+          echo "Loading extension into GNOME Shell..."
+          run_in_pod gdbus call --session \
+            --dest org.gnome.Shell \
+            --object-path /org/gnome/Shell \
+            --method org.gnome.Shell.Eval \
+            "(async () => {
+               const Main = await import('resource:///org/gnome/shell/ui/main.js');
+               const { ExtensionType } = await import('resource:///org/gnome/shell/misc/extensionUtils.js');
+               const { default: Gio } = await import('gi://Gio');
+               const uuid = '${UUID}';
+               if (!Main.extensionManager.lookup(uuid)) {
+                 const dir = Gio.File.new_for_path(global.userdatadir).get_child('extensions').get_child(uuid);
+                 const ext = Main.extensionManager.createExtensionObject(uuid, dir, ExtensionType.PER_USER);
+                 await Main.extensionManager.loadExtension(ext);
+               }
+               return true;
+             })()"
+          sleep 1
 
-          echo "Enabling extension..."
-          run_in_pod gnome-extensions enable "${UUID}"
-          sleep 4
+          echo "Enabling extension via GSettings..."
+          run_in_pod gsettings set org.gnome.shell enabled-extensions "['${UUID}']"
+          sleep 2
 
-          echo "Verifying extension status via D-Bus..."
-          INFO=$(run_in_pod gdbus call --session \
-            --dest org.gnome.Shell.Extensions \
-            --object-path /org/gnome/Shell/Extensions \
-            --method org.gnome.Shell.Extensions.GetExtensionInfo "${UUID}")
+          echo "Verifying extension status..."
+          INFO=$(run_in_pod gnome-extensions info "${UUID}")
+          echo "${INFO}"
 
-          echo "Extension Info: ${INFO}"
-
-          # The state is returned as a double (<1.0>) on some shell versions and as uint32 on others
-          if echo "${INFO}" | grep -Eq "'state': <(uint32 )?1(\.0)?>"; then
+          if echo "${INFO}" | grep -q "State: ACTIVE"; then
             echo "SUCCESS: Extension is ACTIVE in GNOME ${{ matrix.gnome-version }}!"
           else
             echo "ERROR: Extension failed to activate in GNOME ${{ matrix.gnome-version }}!"
             echo "=== Journal logs ==="
-            run_in_pod journalctl --user -u "gnome-xsession@:99" --no-pager -n 80 || true
-            podman stop "${POD}"
+            podman exec "${POD}" journalctl -b -o short-precise --no-pager | grep -E "extensions-sync|gnome-shell" | tail -n 80 || true
             exit 1
           fi
-
-          podman stop "${POD}"
