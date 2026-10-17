@@ -2,20 +2,16 @@
 import Secret from 'gi://Secret';
 import { CredentialStorePort, CredentialType, ProviderCredentials } from '@esync/core/ports';
 
-const DEFAULT_SCHEMA = new Secret.Schema(
-  'org.gnome.shell.extensions.extensions-sync.Credentials',
-  Secret.SchemaFlags.NONE,
-  {
-    provider: Secret.SchemaAttributeType.STRING,
-    type: Secret.SchemaAttributeType.STRING,
-  },
-);
-
 export class SecretCredentialStore implements CredentialStorePort {
   private schema: any;
 
-  constructor(schema: any = DEFAULT_SCHEMA) {
-    this.schema = schema;
+  constructor(schema?: any) {
+    this.schema =
+      schema ??
+      new Secret.Schema('org.gnome.shell.extensions.extensions-sync.Credentials', Secret.SchemaFlags.NONE, {
+        provider: Secret.SchemaAttributeType.STRING,
+        type: Secret.SchemaAttributeType.STRING,
+      });
   }
 
   async getCredential(provider: string, type: CredentialType): Promise<string | null> {

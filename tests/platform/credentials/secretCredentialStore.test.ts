@@ -29,6 +29,17 @@ describe('SecretCredentialStore', () => {
         expect.any(Function),
       );
     });
+
+    it('creates default schema when no schema is provided', () => {
+      const defaultStore = new SecretCredentialStore();
+      expect((defaultStore as any).schema).toBeDefined();
+      expect((defaultStore as any).schema.name).toBe('org.gnome.shell.extensions.extensions-sync.Credentials');
+      expect((defaultStore as any).schema.flags).toBe(SchemaFlags.NONE);
+      expect((defaultStore as any).schema.attributes).toEqual({
+        provider: SchemaAttributeType.STRING,
+        type: SchemaAttributeType.STRING,
+      });
+    });
   });
 
   describe('setCredential', () => {
