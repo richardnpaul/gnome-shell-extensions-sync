@@ -2,12 +2,12 @@
   "name": "Extensions Sync",
   "description": "Sync all extensions and their configurations across all gnome instances",
   "uuid": "extensions-sync@richardnpaul.github.com",
-  "version": 1,
+  "version": 2,
   "donations": {
-    "github": "oae"
+    "github": "richardnpaul"
   },
   "settings-schema": "org.gnome.shell.extensions.extensions-sync",
-  "url": "https://github.com/oae/gnome-shell-extensions-sync",
+  "url": "https://github.com/richardnpaul/gnome-shell-extensions-sync",
   "gettext-domain": "extensions-sync@richardnpaul.github.com",
-  "shell-version": ["47", "48", "49", "50", "51"]
+  "shell-version": ["47", "48", "49", "50"]
 }

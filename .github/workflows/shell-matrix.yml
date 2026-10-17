@@ -94,6 +94,8 @@ jobs:
           podman exec --user gnomeshell "${POD}" mkdir -p /home/gnomeshell/.local/share/gnome-shell/extensions
           podman cp "${TMP_DIR}/${UUID}" "${POD}:/home/gnomeshell/.local/share/gnome-shell/extensions/"
           podman exec "${POD}" chown -R gnomeshell:gnomeshell "/home/gnomeshell/.local/share/gnome-shell/extensions/${UUID}"
+          run_in_pod glib-compile-schemas "/home/gnomeshell/.local/share/gnome-shell/extensions/${UUID}/schemas"
+          run_in_pod gsettings set org.gnome.shell disable-extension-version-validation true
           rm -rf "${TMP_DIR}"
 
           echo "Loading extension into GNOME Shell..."

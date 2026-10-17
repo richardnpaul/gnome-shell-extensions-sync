@@ -5,9 +5,8 @@
 [![opensource](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](#)
 [![licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://github.com/richardnpaul/gnome-shell-extensions-sync/blob/master/LICENSE)
 [![latest](https://img.shields.io/github/v/release/richardnpaul/gnome-shell-extensions-sync)](https://github.com/richardnpaul/gnome-shell-extensions-sync/releases/latest)
-[![compare](https://img.shields.io/github/commits-since/richardnpaul/gnome-shell-extensions-sync/latest/master)](https://github.com/richardnpaul/gnome-shell-extensions-sync/compare)
 
-Syncs gnome shell keybindings, tweaks settings and extensions with their configuration across all gnome installations
+Syncs gnome shell keybindings, tweaks settings and extensions with their configuration across all gnome installations. Originally the work of [Osman Alperen Elhan](https://github.com/oae/)
 
 |                     Provider                      |                       Synced Data                       |                     General Settings                     |
 | :-----------------------------------------------: | :-----------------------------------------------------: | :------------------------------------------------------: |
@@ -81,6 +80,7 @@ During development, run `npm run watch` to automatically recompile changed files
 - **Mutation Testing**: `npm run test:mutation` (Stryker Mutator with 100% score enforcement)
 - **Code Formatting & Linting**: `pre-commit run --all-files` (or `npm run lint` / `npm run typecheck`)
 - **Package & EGO Review Linting**:
+
   ```sh
   npm run build:package
   shexli dist/extensions-sync@richardnpaul.github.com.zip
@@ -101,20 +101,29 @@ During development, run `npm run watch` to automatically recompile changed files
 - **RTL Support**:
   - All preferences UI layouts use Libadwaita logical positioning (`add_prefix` / `add_suffix`) with automatic layout mirroring.
   - Test RTL preferences layout headlessly via:
+
     ```sh
     npm run test:prefs:rtl
     ```
+
 - **Extract Translatable Strings**:
+
   ```sh
   npm run translations:extract
   ```
+
   Generates/updates the template file [`po/extensions-sync@richardnpaul.github.com.pot`](po/extensions-sync@richardnpaul.github.com.pot).
+
 - **Compile Translation Catalogs**:
+
   ```sh
   npm run build:locales
   ```
+
   Compiles all `po/*.po` files into `dist/locale/<lang>/LC_MESSAGES/extensions-sync@richardnpaul.github.com.mo`.
+
 - **Add a New Language**:
+
   ```sh
   msginit -i po/extensions-sync@richardnpaul.github.com.pot -o po/<lang>.po -l <lang>
   ```
@@ -147,14 +156,18 @@ During development, run `npm run watch` to automatically recompile changed files
 - **Artifact Attestations (Sigstore / GitHub OIDC)**:
   - Cryptographic SLSA build provenance and SBOM attestations generated via `actions/attest-build-provenance` and `actions/attest-sbom`.
   - Verifiable via GitHub CLI:
+
     ```sh
     gh attestation verify dist/extensions-sync@richardnpaul.github.com.zip --owner richardnpaul
     ```
+
 - **Checksum Verification**:
   - SHA-256 checksums generated via `npm run checksums` into `dist/checksums.txt`.
   - Downstream verification:
+
     ```sh
     sha256sum -c checksums.txt
     ```
+
 - **CodeQL Security Analysis (`.github/workflows/codeql.yml`)**:
   - Continuous static application security testing (SAST) scanning for vulnerabilities and code quality issues on PRs and weekly schedule.
